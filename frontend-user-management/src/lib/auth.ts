@@ -81,6 +81,10 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
+   session: {
+        expiresIn: 60 * 60 * 24 * 1 , // 1 days
+        updateAge: 60 * 60 * 12 // 12 hours (every 12 hours the session expiration is updated)
+    },
   plugins: [nextCookies()],
 })
 
