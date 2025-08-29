@@ -1,49 +1,50 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
-    "os"
-    "store-management/internal/handlers"
-    "store-management/internal/middleware"
-    "github.com/gorilla/mux"
-    "github.com/joho/godotenv"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"store-management/internal/database"
+	"store-management/internal/handlers"
+	"store-management/internal/middleware"
+
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-    // Load environment variables
-    if err := godotenv.Load(); err != nil {
-        log.Printf("Warning: .env file not found")
-    }
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Warning: .env file not found")
+	}
 
-    // Initialize database connection
-    db, err := database.InitDB()
-    if err != nil {
-        log.Fatalf("Failed to connect to database: %v", err)
-    }
+	// Initialize database connection
+	dbConn, err := database.InitDB()
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	defer dbConn.Close()
 	log.Println("Database connected")
-    defer db.Close()
 
-    // Create router
-    router := mux.NewRouter()
+	// Create router
+	router := mux.NewRouter()
 
-    // Add middleware
-    router.Use(middleware.LoggingMiddleware)
-    router.Use(middleware.AuthMiddleware)
+	// Add middleware
+	router.Use(middleware.LoggingMiddleware)
+	router.Use(middleware.AuthMiddleware)
 
-    // Initialize handlers
-    h := handlers.NewHandler(db)
+	// Initialize handlers
+	h := handlers.NewHandler(dbConn.GormDB)
+	// Register routes
+	h.RegisterRoutes(router)
 
-    // Register routes
-    h.RegisterRoutes(router)
+	// Start server
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8001"
+	}
 
-    // Start server
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "8001"
-    }
-
-    fmt.Printf("Server starting on port %s\n", port)
-    log.Fatal(http.ListenAndServe(":"+port, router))
+	fmt.Printf("Server starting on port %s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
