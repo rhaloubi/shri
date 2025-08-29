@@ -5,8 +5,6 @@ import (
     "log"
     "net/http"
     "os"
-    "store-management/internal/config"
-    "store-management/internal/database"
     "store-management/internal/handlers"
     "store-management/internal/middleware"
     "github.com/gorilla/mux"
@@ -24,6 +22,7 @@ func main() {
     if err != nil {
         log.Fatalf("Failed to connect to database: %v", err)
     }
+	log.Println("Database connected")
     defer db.Close()
 
     // Create router
