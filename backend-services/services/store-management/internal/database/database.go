@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"store-management/internal/domain"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -27,6 +28,11 @@ func InitDB() (*DBConnection, error) {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
+	// Run migrations
+	if err := autoMigrate(gormDB); err != nil {
+		return nil, fmt.Errorf("failed to run migrations: %w", err)
+	}
+
 	// Get underlying *sql.DB for cleanup
 	sqlDB, err := gormDB.DB()
 	if err != nil {
@@ -41,4 +47,18 @@ func InitDB() (*DBConnection, error) {
 
 func (dbConn *DBConnection) Close() error {
 	return dbConn.SQLDB.Close()
+}
+
+// autoMigrate runs database migrations for all models
+func autoMigrate(db *gorm.DB) error {
+	// Enable UUID extension for PostgreSQL
+	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error; err != nil {
+		return fmt.Errorf("failed to create uuid extension: %w", err)
+	}
+
+	// Run migrations for all models
+	return db.AutoMigrate(
+		&domain.StoreOwner{},
+		&domain.Store{},
+	)
 }

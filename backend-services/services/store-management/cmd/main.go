@@ -47,4 +47,7 @@ func main() {
 
 	fmt.Printf("Server starting on port %s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
+
+	// call routes
+	setupRoutes(router, dbConn.GormDB)
 }
