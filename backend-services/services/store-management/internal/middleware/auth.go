@@ -2,20 +2,27 @@ package middleware
 
 import (
 	"context"
-	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type Claims struct {
 	UserID  string `json:"user_id"`
 	IsAdmin bool   `json:"is_admin"`
+	jwt.RegisteredClaims
 }
 
-type AuthenticationMiddleware struct{}
+type AuthenticationMiddleware struct {
+	jwtSecret []byte
+}
 
-func NewAuthMiddleware() *AuthenticationMiddleware {
-	return &AuthenticationMiddleware{}
+func NewAuthMiddleware(secret string) *AuthenticationMiddleware {
+	return &AuthenticationMiddleware{
+		jwtSecret: []byte(secret),
+	}
 }
 
 func (m *AuthenticationMiddleware) ValidateToken(next http.HandlerFunc) http.HandlerFunc {
@@ -32,16 +39,29 @@ func (m *AuthenticationMiddleware) ValidateToken(next http.HandlerFunc) http.Han
 			return
 		}
 
-		// Here you would normally validate the JWT token
-		// For now, we'll assume the token is a JSON string containing user_id and is_admin
-		var claims Claims
-		if err := json.Unmarshal([]byte(tokenParts[1]), &claims); err != nil {
+		tokenString := tokenParts[1]
+		claims := &Claims{}
+
+		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			// Validate the signing method
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return m.jwtSecret, nil
+		})
+
+		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
 
+		if !token.Valid {
+			http.Error(w, "Token is not valid", http.StatusUnauthorized)
+			return
+		}
+
 		// Add claims to request context
-		ctx := context.WithValue(r.Context(), "claims", claims)
+		ctx := context.WithValue(r.Context(), "claims", *claims)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }

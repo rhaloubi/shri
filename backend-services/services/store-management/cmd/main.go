@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 	"store-management/internal/database"
-	"store-management/internal/handlers"
 	"store-management/internal/middleware"
+	"store-management/internal/routes"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -32,12 +32,9 @@ func main() {
 
 	// Add middleware
 	router.Use(middleware.LoggingMiddleware)
-	router.Use(middleware.AuthMiddleware)
 
-	// Initialize handlers
-	h := handlers.NewHandler(dbConn.GormDB)
-	// Register routes
-	h.RegisterRoutes(router)
+	// Setup routes before starting the server
+	routes.SetupRoutes(router, dbConn.GormDB)
 
 	// Start server
 	port := os.Getenv("PORT")
@@ -47,7 +44,4 @@ func main() {
 
 	fmt.Printf("Server starting on port %s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
-
-	// call routes
-	setupRoutes(router, dbConn.GormDB)
 }

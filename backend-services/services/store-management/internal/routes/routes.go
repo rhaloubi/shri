@@ -1,6 +1,7 @@
-package main
+package routes
 
 import (
+	"os"
 	"store-management/internal/handlers"
 	"store-management/internal/middleware"
 
@@ -8,10 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func setupRoutes(r *mux.Router, db *gorm.DB) {
+func SetupRoutes(r *mux.Router, db *gorm.DB) {
+	jwtSecret := os.Getenv("JWT_SECRET")
 	storeOwnerHandler := handlers.NewStoreOwnerHandler(db)
 	storeHandler := handlers.NewStoreHandler(db)
-	authMiddleware := middleware.NewAuthMiddleware()
+	authMiddleware := middleware.NewAuthMiddleware(jwtSecret)
 
 	// Store Owner routes
 	r.HandleFunc("/api/store-owners", authMiddleware.ValidateToken(storeOwnerHandler.CreateStoreOwner)).Methods("POST")
