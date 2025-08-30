@@ -16,12 +16,16 @@ model User {
   email         String
   emailVerified Boolean
   image         String?
-  role          String?   // Added for admin plugin
+  role          String? // Added for admin plugin
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
   addresses     Address[]
+
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
 
   @@unique([email])
   @@map("user")
@@ -37,6 +41,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@unique([token])
   @@map("session")

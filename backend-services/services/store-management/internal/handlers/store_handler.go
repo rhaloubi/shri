@@ -28,7 +28,7 @@ func (h *StoreHandler) CreateStore(w http.ResponseWriter, r *http.Request) {
 
 	// Check if user is a store owner
 	var storeOwner domain.StoreOwner
-	result := h.db.Where("user_id = ?", claims.UserID).First(&storeOwner)
+	result := h.db.Where("user_id = ?", claims.ID).First(&storeOwner)
 	if result.Error != nil {
 		http.Error(w, "Must be a store owner to create a store", http.StatusForbidden)
 		return
@@ -128,13 +128,13 @@ func (h *StoreHandler) ListStores(w http.ResponseWriter, r *http.Request) {
 	var stores []domain.Store
 	var result *gorm.DB
 
-	if claims.IsAdmin {
+	if claims.Role == "admin" {
 		// Admin can see all stores
 		result = h.db.Find(&stores)
 	} else {
 		// Regular users can only see stores they own
 		var storeOwner domain.StoreOwner
-		result = h.db.Where("user_id = ?", claims.UserID).First(&storeOwner)
+		result = h.db.Where("user_id = ?", claims.ID).First(&storeOwner)
 		if result.Error != nil {
 			http.Error(w, "Store owner not found", http.StatusNotFound)
 			return

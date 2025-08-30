@@ -28,7 +28,7 @@ func (h *StoreOwnerHandler) CreateStoreOwner(w http.ResponseWriter, r *http.Requ
 
 	// Check if user already has a store owner profile
 	var existingOwner domain.StoreOwner
-	result := h.db.Where("user_id = ?", claims.UserID).First(&existingOwner)
+	result := h.db.Where("user_id = ?", claims.ID).First(&existingOwner)
 	if result.Error == nil {
 		http.Error(w, "User already has a store owner profile", http.StatusConflict)
 		return
@@ -41,7 +41,7 @@ func (h *StoreOwnerHandler) CreateStoreOwner(w http.ResponseWriter, r *http.Requ
 	}
 
 	// Set the user_id from the token
-	storeOwner.UserID = claims.UserID
+	storeOwner.UserID = claims.ID
 
 	result = h.db.Create(&storeOwner)
 	if result.Error != nil {
@@ -72,7 +72,7 @@ func (h *StoreOwnerHandler) GetStoreOwner(w http.ResponseWriter, r *http.Request
 	}
 
 	// Check if user is admin or the owner
-	if !claims.IsAdmin && storeOwner.UserID != claims.UserID {
+	if claims.Role != "admin" && storeOwner.UserID != claims.ID {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
@@ -132,12 +132,12 @@ func (h *StoreOwnerHandler) ListStoreOwners(w http.ResponseWriter, r *http.Reque
 	var storeOwners []domain.StoreOwner
 	var result *gorm.DB
 
-	if claims.IsAdmin {
+	if claims.Role == "admin" {
 		// Admin can see all store owners
 		result = h.db.Find(&storeOwners)
 	} else {
 		// Regular users can only see their own store owner profile
-		result = h.db.Where("user_id = ?", claims.UserID).Find(&storeOwners)
+		result = h.db.Where("user_id = ?", claims.ID).Find(&storeOwners)
 	}
 
 	if result.Error != nil {

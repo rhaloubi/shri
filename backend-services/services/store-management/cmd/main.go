@@ -41,6 +41,7 @@ func main() {
 	if port == "" {
 		port = "8001"
 	}
+	log.Println("JWT_PUBLIC_KEY from Go:", os.Getenv("JWT_PUBLIC_KEY"))
 
 	fmt.Printf("Server starting on port %s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))

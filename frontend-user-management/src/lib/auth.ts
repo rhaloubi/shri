@@ -36,7 +36,8 @@ export const auth = betterAuth({
       enableJwtInSignIn: true,
       jwt: {
         expirationTime: 60 * 60 * 24 * 1,
-        definePayload: ({user}) => ({
+        algorithm: 'HS256',
+        definePayload: ({ user }) => ({
           id: user.id,
           email: user.email,
           role: user.role as string
@@ -51,9 +52,9 @@ export const auth = betterAuth({
     }),
     admin({
       adminUserIds: [], 
-      adminRoles: ["admin"], 
-    }),
-    nextCookies(),
+         }),
+        nextCookies(),
+
   ],
 })
 
