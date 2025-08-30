@@ -11,7 +11,10 @@ import (
 
 func SetupRoutes(r *mux.Router, db *gorm.DB) {
 	storeOwnerHandler := handlers.NewStoreOwnerHandler(db)
-	storeHandler := handlers.NewStoreHandler(db)
+	storeHandler, err := handlers.NewStoreHandler(db)
+	if err != nil {
+		log.Fatalf("Failed to initialize store handler: %v", err)
+	}
 	authMiddleware, err := middleware.NewAuthMiddleware()
 	if err != nil {
 		log.Fatalf("Failed to initialize auth middleware: %v", err)
@@ -27,7 +30,6 @@ func SetupRoutes(r *mux.Router, db *gorm.DB) {
 	// Store routes
 	r.HandleFunc("/api/stores", authMiddleware.ValidateToken(storeHandler.CreateStore)).Methods("POST")
 	r.HandleFunc("/api/stores", authMiddleware.ValidateToken(storeHandler.ListStores)).Methods("GET")
-	r.HandleFunc("/api/stores/{id}", authMiddleware.ValidateToken(storeHandler.GetStore)).Methods("GET")
 	r.HandleFunc("/api/stores/{id}", authMiddleware.ValidateToken(storeHandler.UpdateStore)).Methods("PUT")
 	r.HandleFunc("/api/stores/{id}", authMiddleware.ValidateToken(storeHandler.DeleteStore)).Methods("DELETE")
 	r.HandleFunc("/api/store-owners/{ownerID}/stores", authMiddleware.ValidateToken(storeHandler.GetStoresByOwner)).Methods("GET")
