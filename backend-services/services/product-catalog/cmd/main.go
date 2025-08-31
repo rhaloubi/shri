@@ -40,7 +40,7 @@ func main() {
 	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8001"
+		port = "8002"
 	}
 
 	fmt.Printf("Server starting on port %s\n", port)
