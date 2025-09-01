@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"product-catalog/api/routes"
 	"product-catalog/internal/database"
 
-	/*"product-catalog/internal/middleware"
-	"product-catalog/internal/routes"*/
+	//"product-catalog/internal/middleware"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -35,7 +35,7 @@ func main() {
 	//router.Use(middleware.LoggingMiddleware)
 
 	// Setup routes before starting the server
-	//routes.SetupRoutes(router, dbConn.GormDB)
+	routes.SetupRoutes(router, dbConn.GormDB)
 
 	// Start server
 	port := os.Getenv("PORT")

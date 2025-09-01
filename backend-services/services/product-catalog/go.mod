@@ -3,6 +3,7 @@ module product-catalog
 go 1.25.0
 
 require (
+	github.com/cloudinary/cloudinary-go/v2 v2.13.0
 	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
 	gorm.io/driver/postgres v1.6.0
@@ -10,7 +11,6 @@ require (
 )
 
 require (
-	github.com/cloudinary/cloudinary-go/v2 v2.13.0 // indirect
 	github.com/creasty/defaults v1.7.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
