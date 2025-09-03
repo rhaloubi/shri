@@ -5,14 +5,15 @@ import (
 )
 
 type Product struct {
-	ID          string    `gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
-	StoreID     string    `gorm:"type:uuid;not null"`
-	Name        string    `gorm:"not null"`
-	Description string    `gorm:"type:text"`
+	ID          string `gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	StoreID     string `gorm:"not null"`
+	Name        string `gorm:"not null"`
+	Description string `gorm:"type:text"`
 	Category    string
-	Price       float64   `gorm:"type:decimal(10,2)"`
+	Price       float64 `gorm:"type:decimal(10,2)"`
 	SKU         string
-	IsActive    bool      `gorm:"default:true"`
+	IsActive    bool `gorm:"default:true"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	Images      []Image `json:"images" gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE"`
 }

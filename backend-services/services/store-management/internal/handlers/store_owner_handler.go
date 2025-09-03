@@ -28,7 +28,7 @@ func (h *StoreOwnerHandler) CreateStoreOwner(w http.ResponseWriter, r *http.Requ
 
 	// Check if user already has a store owner profile
 	var existingOwner domain.StoreOwner
-	result := h.db.First(&existingOwner, "id = ?", claims.ID)
+	result := h.db.Where("user_id = ?", claims.ID).First(&existingOwner)
 	if result.Error == nil {
 		http.Error(w, "User already has a store owner profile", http.StatusConflict)
 		return
@@ -40,8 +40,8 @@ func (h *StoreOwnerHandler) CreateStoreOwner(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	// Set the ID from the JWT claims
-	storeOwner.ID = claims.ID
+	// Set the user_id from the token
+	storeOwner.UserID = claims.ID
 
 	result = h.db.Create(&storeOwner)
 	if result.Error != nil {
@@ -72,7 +72,7 @@ func (h *StoreOwnerHandler) GetStoreOwner(w http.ResponseWriter, r *http.Request
 	}
 
 	// Check if user is admin or the owner
-	if claims.Role != "admin" && storeOwner.ID != claims.ID {
+	if claims.Role != "admin" && storeOwner.UserID != claims.ID {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}

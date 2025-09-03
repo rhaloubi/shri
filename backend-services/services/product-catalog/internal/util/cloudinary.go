@@ -3,6 +3,7 @@ package util
 import (
 	"context"
 	"fmt"
+	"mime/multipart"
 	"os"
 
 	"github.com/cloudinary/cloudinary-go/v2"
@@ -29,9 +30,10 @@ func NewCloudinaryService() (*CloudinaryService, error) {
 }
 
 // UploadImage uploads an image file to Cloudinary and returns the secure URL
-func (s *CloudinaryService) UploadImage(ctx context.Context, filePath string) (string, error) {
-	uploadResult, err := s.cld.Upload.Upload(ctx, filePath, uploader.UploadParams{
-		Folder: "product_images",
+func (s *CloudinaryService) UploadImage(ctx context.Context, file multipart.File, publicID string) (string, error) {
+	uploadResult, err := s.cld.Upload.Upload(ctx, file, uploader.UploadParams{
+		Folder:   "product_images",
+		PublicID: publicID,
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to upload image: %v", err)

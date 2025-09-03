@@ -12,11 +12,15 @@ import (
 // SetupRoutes configures all the routes for the product catalog service
 func SetupRoutes(r *mux.Router, db *gorm.DB) {
 	// Initialize handlers
-	productHandler := handlers.NewProductHandler(db)
+	productHandler, err := handlers.NewProductHandler(db)
+	if err != nil {
+		log.Fatalf("Failed to initialize product handler: %v", err)
+	}
 	imageHandler, err := handlers.NewImageHandler(db)
 	if err != nil {
 		log.Fatalf("Failed to initialize image handler: %v", err)
 	}
+	inventoryHandler := handlers.NewInventoryHandler(db)
 
 	// Initialize middleware
 	authMiddleware, err := middleware.NewAuthMiddleware()
@@ -38,4 +42,8 @@ func SetupRoutes(r *mux.Router, db *gorm.DB) {
 
 	// Store-specific product routes
 	r.HandleFunc("/api/stores/{storeId}/products", authMiddleware.ValidateToken(productHandler.GetProductsByStore)).Methods("GET")
+
+	// Inventory routes
+	r.HandleFunc("/api/products/{productId}/inventory", productHandler.GetProduct).Methods("GET")
+	r.HandleFunc("/api/products/{productId}/inventory", authMiddleware.ValidateToken(inventoryHandler.UpdateInventory)).Methods("PUT")
 }

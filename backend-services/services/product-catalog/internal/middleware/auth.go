@@ -66,6 +66,7 @@ func (m *AuthenticationMiddleware) ValidateToken(next http.HandlerFunc) http.Han
 
 		rawClaims := token.PrivateClaims()
 		claimsJSON, _ := json.MarshalIndent(rawClaims, "", "  ")
+		log.Println("DEBUG: Raw Claims:", string(claimsJSON))
 
 		var claims Claims
 		if err := json.Unmarshal(claimsJSON, &claims); err != nil {
@@ -73,6 +74,8 @@ func (m *AuthenticationMiddleware) ValidateToken(next http.HandlerFunc) http.Han
 			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
 			return
 		}
+
+		log.Printf("DEBUG: Claims: ID=%s, Email=%s", claims.ID, claims.Email)
 
 		ctx := context.WithValue(r.Context(), "claims", claims)
 		next.ServeHTTP(w, r.WithContext(ctx))

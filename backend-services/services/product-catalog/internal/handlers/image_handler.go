@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"product-catalog/internal/domain"
 	"product-catalog/internal/middleware"
 	"product-catalog/internal/util"
+	"time"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
@@ -24,9 +26,10 @@ func NewImageHandler(db *gorm.DB) (*ImageHandler, error) {
 	return &ImageHandler{db: db, cloudinary: cloudinary}, nil
 }
 
+// Update the UploadImage function
 func (h *ImageHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	claims, ok := r.Context().Value("claims").(middleware.Claims)
-	if !ok || claims.StoreID == "" {
+	if !ok || claims.ID == "" {
 		http.Error(w, "Unauthorized - Store access required", http.StatusUnauthorized)
 		return
 	}
@@ -41,7 +44,7 @@ func (h *ImageHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if product.StoreID != claims.StoreID {
+	if product.StoreID != claims.ID {
 		http.Error(w, "Forbidden - Product belongs to different store", http.StatusForbidden)
 		return
 	}
@@ -52,15 +55,16 @@ func (h *ImageHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, header, err := r.FormFile("image")
+	file, _, err := r.FormFile("image")
 	if err != nil {
 		http.Error(w, "No image file provided", http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 
-	// Upload to Cloudinary
-	url, err := h.cloudinary.UploadImage(r.Context(), header.Filename)
+	// Upload to Cloudinary with a unique public ID
+	publicID := fmt.Sprintf("product-%s-image-%d", productID, time.Now().UnixNano())
+	url, err := h.cloudinary.UploadImage(r.Context(), file, publicID)
 	if err != nil {
 		http.Error(w, "Failed to upload image", http.StatusInternalServerError)
 		return
@@ -86,7 +90,7 @@ func (h *ImageHandler) UploadImage(w http.ResponseWriter, r *http.Request) {
 
 func (h *ImageHandler) SetPrimaryImage(w http.ResponseWriter, r *http.Request) {
 	claims, ok := r.Context().Value("claims").(middleware.Claims)
-	if !ok || claims.StoreID == "" {
+	if !ok || claims.ID == "" {
 		http.Error(w, "Unauthorized - Store access required", http.StatusUnauthorized)
 		return
 	}
@@ -102,7 +106,7 @@ func (h *ImageHandler) SetPrimaryImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if product.StoreID != claims.StoreID {
+	if product.StoreID != claims.ID {
 		http.Error(w, "Forbidden - Product belongs to different store", http.StatusForbidden)
 		return
 	}
@@ -132,7 +136,7 @@ func (h *ImageHandler) SetPrimaryImage(w http.ResponseWriter, r *http.Request) {
 
 func (h *ImageHandler) UpdateImageAltText(w http.ResponseWriter, r *http.Request) {
 	claims, ok := r.Context().Value("claims").(middleware.Claims)
-	if !ok || claims.StoreID == "" {
+	if !ok || claims.ID == "" {
 		http.Error(w, "Unauthorized - Store access required", http.StatusUnauthorized)
 		return
 	}
@@ -148,7 +152,7 @@ func (h *ImageHandler) UpdateImageAltText(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if product.StoreID != claims.StoreID {
+	if product.StoreID != claims.ID {
 		http.Error(w, "Forbidden - Product belongs to different store", http.StatusForbidden)
 		return
 	}
@@ -172,7 +176,7 @@ func (h *ImageHandler) UpdateImageAltText(w http.ResponseWriter, r *http.Request
 
 func (h *ImageHandler) DeleteImage(w http.ResponseWriter, r *http.Request) {
 	claims, ok := r.Context().Value("claims").(middleware.Claims)
-	if !ok || claims.StoreID == "" {
+	if !ok || claims.ID == "" {
 		http.Error(w, "Unauthorized - Store access required", http.StatusUnauthorized)
 		return
 	}
@@ -188,7 +192,7 @@ func (h *ImageHandler) DeleteImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if product.StoreID != claims.StoreID {
+	if product.StoreID != claims.ID {
 		http.Error(w, "Forbidden - Product belongs to different store", http.StatusForbidden)
 		return
 	}

@@ -51,11 +51,6 @@ func (dbConn *DBConnection) Close() error {
 
 // autoMigrate runs database migrations for all models
 func autoMigrate(db *gorm.DB) error {
-	// Enable UUID extension for PostgreSQL
-	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error; err != nil {
-		return fmt.Errorf("failed to create uuid extension: %w", err)
-	}
-
 	// Run migrations for all models
 	return db.AutoMigrate(
 		&domain.StoreOwner{},
