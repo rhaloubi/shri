@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"product-catalog/api/routes"
 	"product-catalog/internal/database"
+	"product-catalog/internal/middleware"
 	"syscall"
 	"time"
 
@@ -36,6 +37,8 @@ func main() {
 
 	// Setup routes
 	routes.SetupRoutes(router, dbConn.GormDB)
+
+	router.Use(middleware.ServiceAuthMiddleware)
 
 	// Get port
 	port := os.Getenv("PORT")

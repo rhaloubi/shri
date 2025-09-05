@@ -8,8 +8,9 @@ import (
 	"os"
 	"os/signal"
 
-	//"order-management/api/routes"
+	"order-management/api/routes"
 	"order-management/internal/database"
+	"order-management/internal/middleware"
 	"syscall"
 	"time"
 
@@ -35,7 +36,9 @@ func main() {
 	router := mux.NewRouter()
 
 	// Setup routes
-	//routes.SetupRoutes(router, dbConn.GormDB)
+	routes.SetupRoutes(router, dbConn.GormDB)
+
+	router.Use(middleware.ServiceAuthMiddleware)
 
 	// Get port
 	port := os.Getenv("PORT")
