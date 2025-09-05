@@ -35,7 +35,8 @@ func main() {
 
 	// Setup routes before starting the server
 	routes.SetupRoutes(router, dbConn.GormDB)
-
+	// In each service's main.go
+	router.Use(middleware.ServiceAuthMiddleware)
 	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
