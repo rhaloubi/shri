@@ -13,7 +13,12 @@ jobs:
     strategy:
       matrix:
         service:
-          [api-gateway, store-management, product-catalog, order-management]
+          [
+            api-gateway,
+            services/store-management,
+            services/product-catalog,
+            services/order-management,
+          ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -59,11 +64,7 @@ jobs:
           cd frontend-user-management
           npm install
 
-      - name: Run Tests with Coverage
-        run: |
-          cd frontend-user-management
-          npm run test -- --coverage
-
+      # Remove the test step since there's no test script
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

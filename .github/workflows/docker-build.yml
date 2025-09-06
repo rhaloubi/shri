@@ -18,7 +18,8 @@ jobs:
     strategy:
       matrix:
         service: [api-gateway, services/store-management, services/product-catalog, services/order-management]
-    if: contains(github.event.head_commit.message, matrix.service) || github.event_name == 'pull_request'
+    # Remove the invalid condition and simplify
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     steps:
       - uses: actions/checkout@v3
 
@@ -50,7 +51,7 @@ jobs:
   # --- Frontend (Next.js) ---
   build-frontend:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'frontend-user-management')
+    if: github.event_name == 'pull_request' || contains(github.event.head_commit.modified, 'frontend-user-management/')
     steps:
       - uses: actions/checkout@v3
 
