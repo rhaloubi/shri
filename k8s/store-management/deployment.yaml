@@ -1,0 +1,51 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store-management
+  labels:
+    app: store-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: store-management
+  template:
+    metadata:
+      labels:
+        app: store-management
+    spec:
+      containers:
+        - name: store-management
+          image: rhaloubi8/store-management:latest # Fixed: Use your actual DockerHub username
+          ports:
+            - containerPort: 8001
+          envFrom:
+            - secretRef:
+                name: store-management-secret
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-management-service
+  labels:
+    app: store-management
+spec:
+  selector:
+    app: store-management
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8001
+      protocol: TCP
+  type: ClusterIP

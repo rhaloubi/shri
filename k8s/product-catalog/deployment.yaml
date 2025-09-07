@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-catalog
+  labels:
+    app: product-catalog
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-catalog
+  template:
+    metadata:
+      labels:
+        app: product-catalog
+    spec:
+      containers:
+        - name: product-catalog
+          image: rhaloubi8/product-catalog:latest
+          ports:
+            - containerPort: 8002
+          envFrom:
+            - secretRef:
+                name: product-catalog-secret
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-catalog-service
+  labels:
+    app: product-catalog
+spec:
+  selector:
+    app: product-catalog
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8002
+      protocol: TCP
+  type: ClusterIP
