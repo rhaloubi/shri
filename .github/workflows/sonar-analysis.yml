@@ -1,26 +1,28 @@
-name: CI/CD with SonarCloud
+name: CI/CD Full Pipeline
 
 on:
   push:
     branches: [main]
+    paths:
+      - "backend-services/**"
+      - "frontend-user-management/**"
   pull_request:
     branches: [main]
 
 jobs:
-  # --- Backend Go Services Analysis ---
-  analyze-go-services:
+  backend:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - service: api-gateway
-            projectKey: microservices_api-gateway
-          - service: services/store-management
-            projectKey: microservices_services-store-management
-          - service: services/product-catalog
-            projectKey: microservices_services-product-catalog
-          - service: services/order-management
-            projectKey: microservices_services-order-management
+          - folder: api-gateway
+            sonar_key: api-gateway
+          - folder: services/services-store-management
+            sonar_key: services-store-management
+          - folder: services/services-product-catalog
+            sonar_key: services-product-catalog
+          - folder: services/services-order-management
+            sonar_key: services-order-management
 
     steps:
       - uses: actions/checkout@v3
@@ -30,26 +32,26 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: "1.25"
+          go-version: 1.25
 
-      - name: Run Unit Tests with Coverage
+      - name: Run Unit Tests & Coverage
         run: |
-          cd backend-services/${{ matrix.service }}
+          cd backend-services/${{ matrix.folder }}
+          go mod tidy
           go test ./... -coverprofile=coverage.out -covermode=atomic
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
+      - name: SonarCloud Scan (Backend)
+        uses: SonarSource/sonarqube-scan-action@v5
         with:
           args: >
-            -Dsonar.projectKey=${{ matrix.projectKey }}
+            -Dsonar.projectKey=microservices_${{ matrix.sonar_key }}
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.sources=.
             -Dsonar.go.coverage.reportPaths=coverage.out
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # --- Frontend Analysis (Next.js) ---
-  analyze-frontend:
+  frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -61,14 +63,21 @@ jobs:
         with:
           node-version: 18
 
+      - name: Set environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: |
           cd frontend-user-management
           npm install
 
-      # Skip tests if not implemented yet
+      - name: Run Tests & Generate Coverage
+        run: |
+          cd frontend-user-management
+
       - name: SonarCloud Scan (Frontend)
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        uses: SonarSource/sonarqube-scan-action@v5
         with:
           args: >
             -Dsonar.projectKey=microservices_frontend
