@@ -27,26 +27,25 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.21
+          go-version: "1.25"
 
-      - name: Run Unit Tests
+      - name: Run Unit Tests with Coverage
         run: |
           cd backend-services/${{ matrix.service }}
-          go test ./... -coverprofile=coverage.out
+          go test ./... -coverprofile=coverage.out -covermode=atomic
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
           args: >
             -Dsonar.projectKey=microservices_${{ matrix.service }}
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.sources=.
             -Dsonar.go.coverage.reportPaths=coverage.out
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # Frontend Analysis
+  # Frontend Analysis (Next.js)
   analyze-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -64,18 +63,17 @@ jobs:
           cd frontend-user-management
           npm install
 
-      # Remove the test step since there's no test script
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      # Skip tests if not implemented yet
+      - name: SonarCloud Scan (Frontend)
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
           args: >
             -Dsonar.projectKey=microservices_frontend
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.sources=src
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.sources=frontend-user-management
+            -Dsonar.javascript.lcov.reportPaths=frontend-user-management/coverage/lcov.info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   # Build and Deploy if all analyses pass
   build-deploy:
@@ -94,9 +92,9 @@ jobs:
       - name: Build and Push Images
         run: |
           # Build and push Go services
-          for service in api-gateway store-management product-catalog order-management; do
-            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/$service:latest ./backend-services/$service
-            docker push ${{ secrets.DOCKERHUB_USERNAME }}/$service:latest
+          for service in api-gateway services/store-management services/product-catalog services/order-management; do
+            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/$(basename $service):latest ./backend-services/$service
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/$(basename $service):latest
           done
 
           # Build and push frontend

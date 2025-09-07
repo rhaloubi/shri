@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'backend-services/**'
-      - 'frontend-user-management/**'
+      - "backend-services/**"
+      - "frontend-user-management/**"
   pull_request:
     branches:
       - main
@@ -17,7 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api-gateway, services/store-management, services/product-catalog, services/order-management]
+        service:
+          [
+            api-gateway,
+            services/store-management,
+            services/product-catalog,
+            services/order-management,
+          ]
     # Remove the invalid condition and simplify
     if: github.event_name == 'pull_request' || github.event_name == 'push'
     steps:
@@ -26,7 +32,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.21
+          go-version: 1.25
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
