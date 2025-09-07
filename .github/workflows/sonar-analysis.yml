@@ -100,4 +100,3 @@ jobs:
           # Build and push frontend
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend-user-management:latest ./frontend-user-management
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend-user-management:latest
-// Add deployment steps here
