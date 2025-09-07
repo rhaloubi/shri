@@ -1,12 +1,13 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
+
 # Install dependencies
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Copy source code
 COPY . .
