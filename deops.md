@@ -6,7 +6,7 @@ Run Go tests and Next.js lint/tests in CI.
 
 SonarQube: use SonarCloud free tier (no need to self-host).
 
-Build Docker images for each service.
+Build Docker images for each service
 
 👉 No cost here (GitHub Actions free minutes + SonarCloud free tier).
 
