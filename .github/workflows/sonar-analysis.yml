@@ -17,13 +17,13 @@ jobs:
             projectKey: microservices_api-gateway
             workingDirectory: backend-services/api-gateway
           - service: services/store-management
-            projectKey: microservices_services-store-management
+            projectKey: microservices_store-management
             workingDirectory: backend-services/services/store-management
           - service: services/product-catalog
-            projectKey: microservices_services-product-catalog
+            projectKey: microservices_product-catalog
             workingDirectory: backend-services/services/product-catalog
           - service: services/order-management
-            projectKey: microservices_services-order-management
+            projectKey: microservices_order-management
             workingDirectory: backend-services/services/order-management
 
     steps:
