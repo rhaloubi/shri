@@ -18,14 +18,7 @@ jobs:
     strategy:
       matrix:
         service:
-          [
-            api-gateway,
-            services/store-management,
-            services/product-catalog,
-            services/order-management,
-          ]
-    # Remove the invalid condition and simplify
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+          [api-gateway, store-management, product-catalog, order-management]
     steps:
       - uses: actions/checkout@v3
 
@@ -40,7 +33,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Go Service
+      - name: Run Tests & Build Go Binary
         run: |
           cd backend-services/${{ matrix.service }}
           go mod tidy
@@ -54,14 +47,13 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
 
-  # --- Frontend (Next.js) ---
+  # --- Frontend (Next.js / React) ---
   build-frontend:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || contains(github.event.head_commit.modified, 'frontend-user-management/')
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
