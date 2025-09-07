@@ -7,19 +7,21 @@ on:
     branches: [main]
 
 jobs:
-  # Backend Go Services Analysis
+  # --- Backend Go Services Analysis ---
   analyze-go-services:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service:
-          [
-            api-gateway,
-            services/store-management,
-            services/product-catalog,
-            services/order-management,
-          ]
-        tags: [api-gateway, store-management, product-catalog, order-management]
+        include:
+          - service: api-gateway
+            projectKey: microservices_api-gateway
+          - service: services/store-management
+            projectKey: microservices_services-store-management
+          - service: services/product-catalog
+            projectKey: microservices_services-product-catalog
+          - service: services/order-management
+            projectKey: microservices_services-order-management
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -39,14 +41,14 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
           args: >
-            -Dsonar.projectKey=microservices_${{ matrix.tags }}
+            -Dsonar.projectKey=${{ matrix.projectKey }}
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.sources=.
             -Dsonar.go.coverage.reportPaths=coverage.out
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # Frontend Analysis (Next.js)
+  # --- Frontend Analysis (Next.js) ---
   analyze-frontend:
     runs-on: ubuntu-latest
     steps:
