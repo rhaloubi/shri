@@ -1,28 +1,30 @@
-name: CI/CD Full Pipeline
+name: CI/CD with SonarCloud
 
 on:
   push:
     branches: [main]
-    paths:
-      - "backend-services/**"
-      - "frontend-user-management/**"
   pull_request:
     branches: [main]
 
 jobs:
-  backend:
+  # --- Backend Go Services Analysis ---
+  analyze-go-services:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - folder: api-gateway
-            sonar_key: api-gateway
-          - folder: services/services-store-management
-            sonar_key: services-store-management
-          - folder: services/services-product-catalog
-            sonar_key: services-product-catalog
-          - folder: services/services-order-management
-            sonar_key: services-order-management
+          - service: api-gateway
+            projectKey: microservices_api-gateway
+            workingDirectory: backend-services/api-gateway
+          - service: services/store-management
+            projectKey: microservices_services-store-management
+            workingDirectory: backend-services/services/store-management
+          - service: services/product-catalog
+            projectKey: microservices_services-product-catalog
+            workingDirectory: backend-services/services/product-catalog
+          - service: services/order-management
+            projectKey: microservices_services-order-management
+            workingDirectory: backend-services/services/order-management
 
     steps:
       - uses: actions/checkout@v3
@@ -32,26 +34,27 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.25
+          go-version: "1.25"
 
-      - name: Run Unit Tests & Coverage
+      - name: Run Unit Tests with Coverage
         run: |
-          cd backend-services/${{ matrix.folder }}
-          go mod tidy
+          cd ${{ matrix.workingDirectory }}
           go test ./... -coverprofile=coverage.out -covermode=atomic
 
-      - name: SonarCloud Scan (Backend)
-        uses: SonarSource/sonarqube-scan-action@v5
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
+          projectBaseDir: ${{ matrix.workingDirectory }}
           args: >
-            -Dsonar.projectKey=microservices_${{ matrix.sonar_key }}
+            -Dsonar.projectKey=${{ matrix.projectKey }}
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.sources=.
             -Dsonar.go.coverage.reportPaths=coverage.out
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  frontend:
+  # --- Frontend Analysis (Next.js) ---
+  analyze-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -63,26 +66,19 @@ jobs:
         with:
           node-version: 18
 
-      - name: Set environment variables
-        run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: |
           cd frontend-user-management
           npm install
 
-      - name: Run Tests & Generate Coverage
-        run: |
-          cd frontend-user-management
-
       - name: SonarCloud Scan (Frontend)
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
+          projectBaseDir: frontend-user-management
           args: >
             -Dsonar.projectKey=microservices_frontend
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.sources=frontend-user-management
-            -Dsonar.javascript.lcov.reportPaths=frontend-user-management/coverage/lcov.info
+            -Dsonar.sources=.
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
