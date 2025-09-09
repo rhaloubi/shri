@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-management
+  labels:
+    app: order-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-management
+  template:
+    metadata:
+      labels:
+        app: order-management
+    spec:
+      containers:
+        - name: order-management
+          image: rhaloubi8/order-management:latest
+          ports:
+            - containerPort: 8003
+          envFrom:
+            - secretRef:
+                name: order-management-secret
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-management-service
+  labels:
+    app: order-management
+spec:
+  selector:
+    app: order-management
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8003
+      protocol: TCP
+  type: ClusterIP

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  NEXT_PUBLIC_API_URL: "http://localhost:3000"
+  NEXT_PUBLIC_APP_NAME: "Microservices App"
+  BETTER_AUTH_URL: "http://localhost:3000"
+
+  NODE_ENV: "production"
+  PORT: "3000"
+
+  # Next.js specific
+  NEXT_TELEMETRY_DISABLED: "1"
