@@ -10,7 +10,7 @@ import { Label } from "~/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Alert, AlertDescription } from "~/components/ui/alert"
 import { Loader2, Store, Mail, Lock } from "lucide-react"
-import { setJWTToken, signIn } from "~/lib/auth-client"
+import { getJWTToken, setJWTToken, signIn } from "~/lib/auth-client"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -33,8 +33,9 @@ export function LoginForm() {
       if (result.error) {
         setError(result.error.message ?? "Invalid credentials")
       } else {
-          await setJWTToken()
-          router.push("/dashboard")
+            const token = await getJWTToken()
+            await setJWTToken(token ?? "")
+            router.push("/dashboard")
       }
     } catch (err) {
       setError("An unexpected error occurred")
@@ -55,8 +56,9 @@ export function LoginForm() {
       })
       
       // Store the JWT token in cookies after successful Google login
-      if (result) {
-        await setJWTToken() 
+      if (result) { 
+        const token = await getJWTToken()
+        await setJWTToken(token ?? "")
       }
     } catch (err) {
       setError("Google sign-in failed")
