@@ -1,7 +1,7 @@
 "use client";
 
 import { Settings, UserPen, KeyRound } from "lucide-react";
-import { useSession } from "../../../../context/SessionContext";
+import {  useSession } from "~/lib/auth-client";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import {
@@ -10,7 +10,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "../../../ui/sidebar";
+} from "~/components/ui/sidebar";
 import { SidebarNav } from "./nav-dash";
 
 const data = {
@@ -29,10 +29,10 @@ const data = {
 };
 
 export function AppSidebar({ ...props }) {
-  const { session } = useSession();
+  const { data: session } = useSession();
 
   // Format session data to match the expected structure by NavUser
-  const userData = session ? { data: session } : null;
+  const userData = session?.user ? { data: session.user } : null;
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-r-0">

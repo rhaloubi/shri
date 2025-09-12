@@ -7,7 +7,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../../../ui/collapsible";
+} from "~/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -17,7 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarGroupLabel,
-} from "../../../ui/sidebar";
+} from "~/components/ui/sidebar";
 
 interface NavItem {
   title: string;

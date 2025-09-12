@@ -3,8 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { LogOut, LayoutDashboard, User, Package2, Plus } from "lucide-react";
-import { useSession } from "../../../context/SessionContext";
-import Cookies from "js-cookie";
+import { signOut, useSession } from "~/lib/auth-client";
 
 import {
   DropdownMenu,
@@ -15,29 +14,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
-import { Button } from "../../ui/button";
-import { Avatar, AvatarFallback } from "../../ui/avatar";
+} from "~/components/ui/dropdown-menu";
+import { Button } from "~/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 export function UserNav() {
   const router = useRouter();
-  const { session, setSession: updateSession } = useSession();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.metaKey) {
         switch (event.key.toLowerCase()) {
           case "p":
-            void router.push("/admin/profile");
+            void router.push("/store-management/profile");
             break;
           case "d":
-            void router.push("/admin/dashboard");
+            void router.push("/store-management/dashboard");
             break;
           case "g":
-            void router.push("/admin/products");
+            void router.push("/store-management/products");
             break;
           case "h":
-            void router.push("/admin/products/add");
+            void router.push("/store-management/products/add");
             break;
           case "z":
             void handleLogout();
@@ -52,9 +51,8 @@ export function UserNav() {
 
   const handleLogout = async () => {
     try {
-      Cookies.remove('authToken', { path: '/' });
-      updateSession(null); // Clear session data
-      void router.push("/admin");
+      await signOut();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) {
         console.error("Logout failed:", error.message);
@@ -66,8 +64,8 @@ export function UserNav() {
     return null;
   }
 
-  const userInitials = session.username
-    ? session.username.substring(0, 2).toUpperCase()
+  const userInitials = session.user?.email
+    ? session.user.email.substring(0, 2).toUpperCase()
     : "UN";
 
   return (
@@ -75,27 +73,31 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarFallback>{userInitials}</AvatarFallback>
+            {session.user?.image ? (
+              <AvatarImage src={session.user?.image} />
+            ) : (
+              <AvatarFallback>{userInitials}</AvatarFallback>
+            )}
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{session.username}</p>
+            <p className="text-sm font-medium leading-none">{session.user?.email}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {session.email}
+              {session.user?.name ?? "User"}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => void router.push("/admin/profile")}>
+          <DropdownMenuItem onClick={() => void router.push("/store-management/profile")}>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => void router.push("/admin/dashboard")}>
+          <DropdownMenuItem onClick={() => void router.push("/store-management/dashboard")}>
             <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
             <DropdownMenuShortcut>⇧⌘D</DropdownMenuShortcut>
@@ -103,12 +105,12 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => void router.push("/admin/products")}>
+          <DropdownMenuItem onClick={() => void router.push("/store-management/products")}>
             <Package2 className="mr-2 h-4 w-4" />
             <span>Products</span>
             <DropdownMenuShortcut>⇧⌘G</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => void router.push("/admin/products/add")}>
+          <DropdownMenuItem onClick={() => void router.push("/store-management/products/add")}>
             <Plus className="mr-2 h-4 w-4" />
             <span>Add Product</span>
             <DropdownMenuShortcut>⇧⌘H</DropdownMenuShortcut>

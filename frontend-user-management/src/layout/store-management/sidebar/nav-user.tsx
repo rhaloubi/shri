@@ -10,13 +10,12 @@ import {
   Package2,
   Plus,
 } from "lucide-react";
-import Cookies from "js-cookie";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../../ui/avatar";
+} from "~/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,17 +24,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../ui/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "../../../ui/sidebar";
+} from "~/components/ui/sidebar";
+import { signOut } from "~/lib/auth-client";
 
 interface User {
   data: {
-    username: string;
+    image: string;
+    name: string;
     email: string;
   };
 }
@@ -50,8 +51,8 @@ export function NavUser({ user }: NavUserProps) {
 
     const handleLogout = async () => {
     try {
-      Cookies.remove('authToken', { path: '/' });
-      void router.push("/admin");
+      await signOut();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) {
         console.error("Logout failed:", error.message);
@@ -59,14 +60,14 @@ export function NavUser({ user }: NavUserProps) {
     }
   };
 
-  if (!user || !user.data) {
+  if (!user || !user?.data) {
     return null;
   }
 
   const userData = user.data;
-  const userInitials = userData.username
-    ?.substring(0, 2)
-    .toUpperCase() ?? "UN";
+  const userInitials = userData.email
+    ? userData.email.substring(0, 2).toUpperCase()
+    : "UN";
 
   return (
     <SidebarMenu>
@@ -77,12 +78,17 @@ export function NavUser({ user }: NavUserProps) {
               className="data-[state=open]:bg-sidebar-accent p-[-2px] data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
+                {userData?.image ? (
+                  <AvatarImage src={userData.image} />
+                ) : (
+                  <AvatarFallback>{userInitials}</AvatarFallback>
+                )}
                 <AvatarFallback className="dark:bg-gray-800 w-[25px] bg-gray-200 rounded-lg">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{userData.username}</span>
+                <span className="truncate font-semibold">{userData.name}</span>
                 <span className="truncate text-xs">{userData.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -97,17 +103,18 @@ export function NavUser({ user }: NavUserProps) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src="/avatars/john-doe.jpg"
-                    alt={userData.username}
-                  />
+                  {userData?.image ? (
+                    <AvatarImage src={userData.image} />
+                  ) : (
+                    <AvatarFallback>{userInitials}</AvatarFallback>
+                  )}
                   <AvatarFallback className="rounded-lg">
                     {userInitials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {userData.username}
+                    {userData.name}
                   </span>
                   <span className="truncate text-xs">{userData.email}</span>
                 </div>

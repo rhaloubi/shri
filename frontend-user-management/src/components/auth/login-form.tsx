@@ -35,7 +35,7 @@ export function LoginForm() {
       } else {
             const token = await getJWTToken()
             await setJWTToken(token ?? "")
-            router.push("/dashboard")
+            router.push("/store-management/dashboard")
       }
     } catch (err) {
       setError("An unexpected error occurred")
@@ -52,7 +52,7 @@ export function LoginForm() {
     try {
       const result = await signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: "/store-management/dashboard",
       })
       
       // Store the JWT token in cookies after successful Google login
