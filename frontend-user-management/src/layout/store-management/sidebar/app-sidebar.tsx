@@ -35,7 +35,7 @@ export function AppSidebar({ ...props }) {
   const userData = session?.user ? { data: session.user } : null;
 
   return (
-    <Sidebar collapsible="icon" {...props} className="border-r-0">
+    <Sidebar collapsible="icon" {...props} className="border-r-0 ">
       <SidebarHeader className="relative h-16 px-2 py-4"></SidebarHeader>
       <SidebarContent>
         <SidebarNav />

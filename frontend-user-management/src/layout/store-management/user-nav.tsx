@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { LogOut, LayoutDashboard, User, Package2, Plus } from "lucide-react";
+import { LogOut, LayoutDashboard, User, Package2, Plus ,Lock } from "lucide-react";
 import { signOut, useSession } from "~/lib/auth-client";
 
 import {
@@ -17,10 +17,12 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { useHasStore } from "~/hooks/useHasStore";
 
 export function UserNav() {
   const router = useRouter();
   const { data: session } = useSession();
+  const { hasStore } = useHasStore();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -68,6 +70,13 @@ export function UserNav() {
     ? session.user.email.substring(0, 2).toUpperCase()
     : "UN";
 
+  const handleNavigation = (path: string, requiresStore: boolean = false) => {
+    if (requiresStore && !hasStore) {
+      return;
+    }
+    void router.push(path);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -92,12 +101,19 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => void router.push("/store-management/profile")}>
-            <User className="mr-2 h-4 w-4" />
+          <DropdownMenuItem 
+            onClick={() => handleNavigation("/store-management/profile", true)}
+            className={!hasStore ? "opacity-50 cursor-not-allowed" : ""}
+          >
+            {hasStore ? (
+              <User className="mr-2 h-4 w-4" />
+            ) : (
+              <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+            )}
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => void router.push("/store-management/dashboard")}>
+          <DropdownMenuItem onClick={() => handleNavigation("/store-management/dashboard")}>
             <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
             <DropdownMenuShortcut>⇧⌘D</DropdownMenuShortcut>
@@ -105,13 +121,27 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => void router.push("/store-management/products")}>
-            <Package2 className="mr-2 h-4 w-4" />
+          <DropdownMenuItem 
+            onClick={() => handleNavigation("/store-management/products", true)}
+            className={!hasStore ? "opacity-50 cursor-not-allowed" : ""}
+          >
+            {hasStore ? (
+              <Package2 className="mr-2 h-4 w-4" />
+            ) : (
+              <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+            )}
             <span>Products</span>
             <DropdownMenuShortcut>⇧⌘G</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => void router.push("/store-management/products/add")}>
-            <Plus className="mr-2 h-4 w-4" />
+          <DropdownMenuItem 
+            onClick={() => handleNavigation("/store-management/products/add", true)}
+            className={!hasStore ? "opacity-50 cursor-not-allowed" : ""}
+          >
+            {hasStore ? (
+              <Plus className="mr-2 h-4 w-4" />
+            ) : (
+              <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+            )}
             <span>Add Product</span>
             <DropdownMenuShortcut>⇧⌘H</DropdownMenuShortcut>
           </DropdownMenuItem>

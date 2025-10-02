@@ -2,7 +2,7 @@ import type React from "react"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "~/components/auth/auth-provider"
 import { Suspense } from "react"
-
+import { ThemeProvider } from "~/components/theme-provider"
 
 
 export default function RootLayout({
@@ -13,7 +13,9 @@ export default function RootLayout({
   return (
     <>
         <Suspense fallback={<div>Loading...</div>}>
+        <ThemeProvider defaultTheme="dark">
           <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
         </Suspense>
         <Analytics />
     </>

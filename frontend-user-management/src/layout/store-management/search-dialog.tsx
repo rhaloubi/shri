@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Search, ArrowRightToLine } from "lucide-react";
+import { Search, ArrowRightToLine, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useHasStore } from "~/hooks/useHasStore";
 import {
   Dialog,
   DialogContent,
@@ -14,23 +15,29 @@ import { Button } from "~/components/ui/button";
 const items = [
   {
     name: "Dashboard",
+    allowWithoutStore: true
   },
   {
     name: "Products",
+    allowWithoutStore: false
   },
   {
     name: "Products/Add",
+    allowWithoutStore: false
   },
   {
     name: "Change-Password",
+    allowWithoutStore: true
   },
   {
     name: "Profile",
+    allowWithoutStore: true
   },
 ];
 
 export function SearchCommand() {
   const router = useRouter();
+  const { hasStore } = useHasStore();
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -75,14 +82,20 @@ export function SearchCommand() {
                 {filteredItems.map((item, index) => (
                   <button
                     key={index}
-                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-200 dark:hover:bg-gray-800 flex text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-900 items-center gap-2"
+                    className={`w-full text-left px-4 py-3 text-sm hover:bg-gray-200 dark:hover:bg-gray-800 flex text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-900 items-center gap-2 ${!item.allowWithoutStore && !hasStore ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={() => {
-                      setOpen(false);
-                      setSearchQuery("");
-                      router.push(`/admin/${item.name.toLowerCase()}`);
+                      if (item.allowWithoutStore || hasStore) {
+                        setOpen(false);
+                        setSearchQuery("");
+                        router.push(`/admin/${item.name.toLowerCase()}`);
+                      }
                     }}
                   >
-                    <ArrowRightToLine className="h-4 w-4 mr-2 text-gray-400" />
+                    {(item.allowWithoutStore || hasStore) ? (
+                      <ArrowRightToLine className="h-4 w-4 mr-2 text-gray-400" />
+                    ) : (
+                      <Lock className="h-4 w-4 mr-2 text-muted-foreground" />
+                    )}
                     <span className="flex-1">{item.name}</span>
                   </button>
                 ))}

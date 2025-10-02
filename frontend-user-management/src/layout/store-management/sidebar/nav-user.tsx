@@ -32,6 +32,8 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar";
 import { signOut } from "~/lib/auth-client";
+import { useHasStore } from "~/hooks/useHasStore";
+import { Lock } from "lucide-react";
 
 interface User {
   data: {
@@ -48,6 +50,7 @@ interface NavUserProps {
 export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { hasStore } = useHasStore();
 
     const handleLogout = async () => {
     try {
@@ -126,8 +129,8 @@ export function NavUser({ user }: NavUserProps) {
                 <Link href="/admin/profile">
                   <UserPen className="mr-2 h-4 w-4" />
                   Profile
-                </Link>
-              </DropdownMenuItem>
+                    </Link>
+                </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/admin/dashboard">
                   <BadgeCheck className="mr-2 h-4 w-4" />
