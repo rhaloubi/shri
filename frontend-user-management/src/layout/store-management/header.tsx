@@ -10,12 +10,25 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from "~/components/ui/hover-card";
+import { useHasStore } from "~/hooks/useHasStore";
+import Link from "next/link";
 
 export default function Header() {
   const { toggleSidebar } = useSidebar();
+    const { hasStore } = useHasStore();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-300 bg-background dark:border-zinc-700">
+      {hasStore ?
+      ""
+      :
+      <div className="w-full justify-center p-2  border-b border-black dark:border-white items-center text-center rounded-b-sm  flex sm:block"> 
+        <p className="text-sm ">
+          {"this account doesn't have a store yet ,  can you please create one "}
+        <Link href="/store-management/create" className="px-2 underline dark:hover:text-gray-400">Create your store</Link>
+        </p>
+      </div>
+      }
       <div className="flex h-16 items-center px-2 sm:px-4">
         <div className="flex flex-1 items-center gap-2">
           <HoverCard>

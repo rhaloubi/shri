@@ -262,3 +262,28 @@ func (h *StoreHandler) GetStoresByOwner(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(stores)
 }
+
+func (h *StoreHandler) HasStore(w http.ResponseWriter, r *http.Request) {
+	// Get claims from context
+	claims, ok := r.Context().Value("claims").(middleware.Claims)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	// Check if user is a store owner
+	var storeOwner domain.StoreOwner
+	result := h.db.Where("user_id = ?", claims.ID).First(&storeOwner)
+	if result.Error != nil {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]bool{"hasStore": false})
+		return
+	}
+
+	// Check if store owner has a store
+	var store domain.Store
+	result = h.db.Where("store_owner_id = ?", storeOwner.ID).First(&store)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]bool{"hasStore": result.Error == nil})
+}
