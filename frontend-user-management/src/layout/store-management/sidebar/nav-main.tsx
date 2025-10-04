@@ -14,19 +14,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarGroupLabel,
 } from "~/components/ui/sidebar";
-import { useHasStore } from "~/hooks/useHasStore";
-import { Lock } from "lucide-react";
 
 interface NavItem {
   title: string;
   url: string;
   icon: LucideIcon;
   isActive?: boolean;
-  allowWithoutStore?: boolean;
   items?: {
     title: string;
     url: string;
@@ -40,8 +36,6 @@ interface NavMainProps {
 }
 
 export function NavMain({ items }: NavMainProps) {
-  const { hasStore } = useHasStore();
-  
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-base">platform</SidebarGroupLabel>
@@ -65,25 +59,13 @@ export function NavMain({ items }: NavMainProps) {
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton
-                        asChild={subItem.allowWithoutStore || hasStore}
-                        className={!subItem.allowWithoutStore && !hasStore ? 'opacity-50  cursor-not-allowed' : ''}
+                      <Link
+                        href={`/store-management/${subItem.url}`}
+                        className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-800"
                       >
-                        {(subItem.allowWithoutStore || hasStore) ? (
-                          <Link
-                            href={`/store-management/${subItem.url}`}
-                            className="dark:hover:bg-gray-800 hover:bg-gray-200 text-md py-3"
-                          >
-                            {subItem.icon && <subItem.icon className="size-5" />}
-                            <span>{subItem.title}</span>
-                          </Link>
-                        ) : (
-                          <div className="flex items-center gap-2 text-md py-3">
-                            <Lock className="size-4 text-muted-foreground" />
-                            <span>{subItem.title}</span>
-                          </div>
-                        )}
-                      </SidebarMenuSubButton>
+                        {subItem.icon && <subItem.icon className="size-5" />}
+                        <span>{subItem.title}</span>
+                      </Link>
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>

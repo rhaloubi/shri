@@ -61,7 +61,6 @@ export function StoreForm({ accountData }: StoreFormProps) {
         throw new Error("Authentication token not found")
       }
 
-      // First, upload the logo if present
       let logoURL = ""
       if (logo) {
         const formData = new FormData()

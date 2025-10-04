@@ -52,7 +52,7 @@ export function NavUser({ user }: NavUserProps) {
   const router = useRouter();
   const { hasStore } = useHasStore();
 
-    const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       await signOut();
       router.push("/");
@@ -72,6 +72,13 @@ export function NavUser({ user }: NavUserProps) {
     ? userData.email.substring(0, 2).toUpperCase()
     : "UN";
 
+  const handleNavigation = (path: string, requiresStore: boolean = false) => {
+    if (requiresStore && !hasStore) {
+      return;
+    }
+    void router.push(path);
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -86,9 +93,6 @@ export function NavUser({ user }: NavUserProps) {
                 ) : (
                   <AvatarFallback>{userInitials}</AvatarFallback>
                 )}
-                <AvatarFallback className="dark:bg-gray-800 w-[25px] bg-gray-200 rounded-lg">
-                  {userInitials}
-                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{userData.name}</span>
@@ -111,9 +115,6 @@ export function NavUser({ user }: NavUserProps) {
                   ) : (
                     <AvatarFallback>{userInitials}</AvatarFallback>
                   )}
-                  <AvatarFallback className="rounded-lg">
-                    {userInitials}
-                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
@@ -125,38 +126,56 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href="/admin/profile">
+              <DropdownMenuItem onClick={() => handleNavigation("/store-management/profile")}>
+                <div className="flex items-center">
                   <UserPen className="mr-2 h-4 w-4" />
                   Profile
-                    </Link>
-                </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/admin/dashboard">
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleNavigation("/store-management/dashboard")}>
+                <div className="flex items-center">
                   <BadgeCheck className="mr-2 h-4 w-4" />
                   Dashboard
-                </Link>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href="/admin/products">
-                  <Package2 className="mr-2 h-4 w-4" />
+              <DropdownMenuItem 
+                onClick={() => handleNavigation("/store-management/products", true)}
+                disabled={!hasStore}
+                className={!hasStore ? "cursor-not-allowed opacity-50" : ""}
+              >
+                <div className="flex items-center">
+                  {hasStore ? (
+                    <Package2 className="mr-2 h-4 w-4" />
+                  ) : (
+                    <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+                  )}
                   Products
-                </Link>
+                </div>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/admin/products/add">
-                  <Plus className="mr-2 h-4 w-4" />
+              <DropdownMenuItem 
+                onClick={() => handleNavigation("/store-management/products/add", true)}
+                disabled={!hasStore}
+                className={!hasStore ? "cursor-not-allowed opacity-50" : ""}
+              >
+                <div className="flex items-center">
+                  {hasStore ? (
+                    <Plus className="mr-2 h-4 w-4" />
+                  ) : (
+                    <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+                  )}
                   Add Product
-                </Link>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Log out
+              <div className="flex items-center">
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

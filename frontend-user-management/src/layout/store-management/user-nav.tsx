@@ -29,16 +29,16 @@ export function UserNav() {
       if (event.shiftKey && event.metaKey) {
         switch (event.key.toLowerCase()) {
           case "p":
-            void router.push("/store-management/profile");
+            void handleNavigation("/store-management/profile");
             break;
           case "d":
-            void router.push("/store-management/dashboard");
+            void handleNavigation("/store-management/dashboard");
             break;
           case "g":
-            void router.push("/store-management/products");
+            void handleNavigation("/store-management/products", true);
             break;
           case "h":
-            void router.push("/store-management/products/add");
+            void handleNavigation("/store-management/products/add" ,true);
             break;
           case "z":
             void handleLogout();
@@ -102,14 +102,8 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem 
-            onClick={() => handleNavigation("/store-management/profile", true)}
-            className={!hasStore ? "opacity-50 cursor-not-allowed" : ""}
-          >
-            {hasStore ? (
+            onClick={() => handleNavigation("/store-management/profile")}>
               <User className="mr-2 h-4 w-4" />
-            ) : (
-              <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
-            )}
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>

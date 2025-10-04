@@ -33,4 +33,7 @@ func SetupRoutes(r *mux.Router, db *gorm.DB) {
 	r.HandleFunc("/api/stores/{id}", authMiddleware.ValidateToken(storeHandler.UpdateStore)).Methods("PUT")
 	r.HandleFunc("/api/stores/{id}", authMiddleware.ValidateToken(storeHandler.DeleteStore)).Methods("DELETE")
 	r.HandleFunc("/api/store-owners/{ownerID}/stores", authMiddleware.ValidateToken(storeHandler.GetStoresByOwner)).Methods("GET")
+
+    // Add the new HasStore endpoint
+    r.HandleFunc("/api/has-store", authMiddleware.ValidateToken(storeHandler.HasStore)).Methods("GET")
 }

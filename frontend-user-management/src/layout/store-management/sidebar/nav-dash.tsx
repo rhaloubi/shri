@@ -17,19 +17,19 @@ import {
 const items = [
   {
     title: "Dashboard",
-    href: "/admin/dashboard",
+    href: "/store-management/dashboard",
     icon: BarChart3,
     allowWithoutStore: true
   },
   {
     title: "Products",
-    href: "/admin/products",
+    href: "/store-management/products",
     icon: Package2,
     allowWithoutStore: false
   },
   {
     title: "Add Product",
-    href: "/admin/products/add",
+    href: "/store-management/products/add",
     icon: Plus,
     allowWithoutStore: false
   },
