@@ -41,7 +41,7 @@ func SetupRoutes(r *mux.Router, db *gorm.DB) {
 	r.HandleFunc("/api/products/{productId}/images/{imageId}/alt-text", authMiddleware.ValidateToken(imageHandler.UpdateImageAltText)).Methods("PUT")
 
 	// Store-specific product routes
-	r.HandleFunc("/api/stores/{storeId}/products", authMiddleware.ValidateToken(productHandler.GetProductsByStore)).Methods("GET")
+	r.HandleFunc("/api/products/{storeId}/stores", authMiddleware.ValidateToken(productHandler.GetProductsByStore)).Methods("GET")
 
 	// Inventory routes
 	r.HandleFunc("/api/products/{productId}/inventory", productHandler.GetProduct).Methods("GET")

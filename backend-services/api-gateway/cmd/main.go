@@ -29,13 +29,13 @@ func main() {
 	// Initialize proxy router
 	proxyRouter := proxy.NewProxyRouter()
 
-	// Setup service routes
-	// Store management routes
-	router.PathPrefix("/api").Handler(proxyRouter.ProxyRequest("store-service"))
+	apiRouter := router.PathPrefix("/api").Subrouter()
 
-	// Other service routes
-	router.PathPrefix("/api").Handler(proxyRouter.ProxyRequest("product-service"))
-	router.PathPrefix("/api").Handler(proxyRouter.ProxyRequest("order-service"))
+	// Setup service routes with specific paths
+	apiRouter.PathPrefix("/stores").Handler(proxyRouter.ProxyRequest("store-service"))
+	apiRouter.PathPrefix("/store-owners").Handler(proxyRouter.ProxyRequest("store-service"))
+	apiRouter.PathPrefix("/products").Handler(proxyRouter.ProxyRequest("product-service"))
+	apiRouter.PathPrefix("/orders").Handler(proxyRouter.ProxyRequest("order-service"))
 
 	// Health check endpoint
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

@@ -22,26 +22,25 @@ type ImageEntry = {
   isPrimary: boolean
 }
 
-interface ApiError {
-  message: string
-}
-
-interface ApiErrorResponse {
-  data: {
-    message: string
-  }
+interface ProductFormData {
+  name: string
+  description: string
+  category: string
+  price: number
+  sku: string
+  isActive: boolean
 }
 
 export default function AddProductPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<ImageEntry[]>([])
-  const [formData, setFormData] = useState({
-    storeId: "",
+  
+  const [formData, setFormData] = useState<ProductFormData>({
     name: "",
     description: "",
     category: "",
-    price: "",
+    price: 0,
     sku: "",
     isActive: true,
   })
@@ -51,13 +50,6 @@ export default function AddProductPage() {
     setFormData((prev) => ({
       ...prev,
       [id]: value,
-    }))
-  }
-
-  const handleSelectChange = (value: string, field: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
     }))
   }
 
@@ -77,7 +69,7 @@ export default function AddProductPage() {
       file,
       url: URL.createObjectURL(file),
       altText: "",
-      isPrimary: images.length === 0, // First image is primary by default
+      isPrimary: images.length === 0,
     }))
 
     setImages((prev) => [...prev, ...newImages])
@@ -122,54 +114,93 @@ export default function AddProductPage() {
       const token = getCookie("better-auth.jwt")
       if (!token) throw new Error("Authentication token not found")
 
-      const requiredFields = ["storeId", "name", "category", "price", "sku"]
-      const missingFields = requiredFields.filter((field) => !formData[field as keyof typeof formData])
+      // Validate required fields
+      const requiredFields = ["name", "sku"]
+      const missingFields = requiredFields.filter((field) => !formData[field as keyof ProductFormData])
 
       if (missingFields.length > 0) {
         throw new Error(`Please fill in all required fields: ${missingFields.join(", ")}`)
       }
 
-      if (images.length === 0) {
-        throw new Error("Please upload at least one image")
-      }
-
-      const hasPrimary = images.some((img) => img.isPrimary)
-      if (!hasPrimary && images.length > 0) {
-        images[0].isPrimary = true
-      }
-
-      const formDataToSend = new FormData()
-
-      formDataToSend.append("store_id", formData.storeId)
-      formDataToSend.append("name", formData.name)
-      formDataToSend.append("description", formData.description)
-      formDataToSend.append("category", formData.category)
-      formDataToSend.append("price", formData.price)
-      formDataToSend.append("sku", formData.sku)
-      formDataToSend.append("is_active", formData.isActive.toString())
-
-      images.forEach((image, index) => {
-        formDataToSend.append("images", image.file)
-        formDataToSend.append(`image_alt_text_${index}`, image.altText)
-        formDataToSend.append(`image_is_primary_${index}`, image.isPrimary.toString())
-      })
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
+      // Create the product (backend will extract store_id from token)
+      const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: formDataToSend,
-        cache: 'no-store'
+        body: JSON.stringify({
+          name: formData.name,
+          description: formData.description,
+          category: formData.category,
+          price: parseFloat(formData.price.toString()),
+          sku: formData.sku,
+          is_active: formData.isActive,
+        }),
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || "Failed to create product")
+      if (!productResponse.ok) {
+        const errorText = await productResponse.text()
+        console.error("Product creation failed:", errorText)
+        
+        // Try to parse as JSON, otherwise use the text
+        let errorMessage = "Failed to create product"
+        try {
+          const errorData = JSON.parse(errorText)
+          errorMessage = errorData.message || errorMessage
+        } catch {
+          errorMessage = errorText || errorMessage
+        }
+        
+        throw new Error(errorMessage)
+      }
+
+      const responseText = await productResponse.text()
+      console.log("Raw product response:", responseText)
+      
+      let responseData
+      try {
+        responseData = JSON.parse(responseText)
+      } catch (parseError) {
+        console.error("Failed to parse product response:", parseError)
+        console.error("Response was:", responseText)
+        throw new Error("Invalid response from server")
+      }
+
+      // Backend returns { success, message, product_id }
+      if (!responseData.success || !responseData.product_id) {
+        throw new Error(responseData.message || "Failed to create product")
+      }
+
+      const productId = responseData.product_id
+
+      // Upload images if any exist
+      if (images.length > 0) {
+        for (const image of images) {
+          const imageFormData = new FormData()
+          imageFormData.append("image", image.file)
+          imageFormData.append("alt_text", image.altText)
+          imageFormData.append("is_primary", image.isPrimary.toString())
+
+          const imageResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images`,
+            {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${token}`,
+              },
+              body: imageFormData,
+            }
+          )
+
+          if (!imageResponse.ok) {
+            console.error("Failed to upload image:", await imageResponse.text())
+          }
+        }
       }
 
       toast.success("Product created successfully")
-      router.push("/products")
+      router.push("/stores-management/products")
       router.refresh()
     } catch (error) {
       console.error("Error creating product:", error)
@@ -184,7 +215,7 @@ export default function AddProductPage() {
       <Toaster position="top-right" expand={true} richColors />
       <div className="w-full">
         <div className="flex items-center gap-4 mb-2">
-          <Button variant="ghost" className="group relative p-2" onClick={() => router.push("/products")}>
+          <Button variant="ghost" className="group relative p-2" onClick={() => router.push("/stores-management/products")}>
             <ArrowLeft className="h-5 w-5" />
             <span className="absolute left-10 bg-secondary text-secondary-foreground text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               Back to Products
@@ -201,18 +232,6 @@ export default function AddProductPage() {
             <div className="bg-card rounded-lg border p-3 sm:p-4 md:p-6">
               <h2 className="text-base sm:text-lg font-semibold mb-4">Product Details</h2>
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="storeId">Store ID *</Label>
-                  <Input
-                    id="storeId"
-                    placeholder="Store identifier"
-                    required
-                    className="max-w-xl"
-                    value={formData.storeId}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="name">Name *</Label>
                   <Input
@@ -254,10 +273,14 @@ export default function AddProductPage() {
                       id="price"
                       type="number"
                       step="0.01"
+                      min="0"
                       placeholder="0.00"
                       required
                       value={formData.price}
-                      onChange={handleInputChange}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        price: parseFloat(e.target.value) || 0
+                      }))}
                     />
                   </div>
                 </div>

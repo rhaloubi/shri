@@ -8,7 +8,7 @@ import (
 )
 
 type ProxyRouter struct {
-	serviceURLs  map[string]string
+	serviceURLs   map[string]string
 	gatewaySecret string
 }
 
@@ -17,7 +17,7 @@ func NewProxyRouter() *ProxyRouter {
 		serviceURLs: map[string]string{
 			"store-service":   os.Getenv("STORE_SERVICE_URL"),
 			"product-service": os.Getenv("PRODUCT_SERVICE_URL"),
-			"order-service":  os.Getenv("ORDER_SERVICE_URL"),
+			"order-service":   os.Getenv("ORDER_SERVICE_URL"),
 		},
 		gatewaySecret: os.Getenv("GATEWAY_SECRET"),
 	}
