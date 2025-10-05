@@ -94,7 +94,6 @@ export default function ProductsPage() {
       }
       
       const data = await response.json();
-      console.log('Raw API response:', data);
       
       if (data && Array.isArray(data)) {
         setProducts(data);

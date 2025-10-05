@@ -1,9 +1,9 @@
 
-"use client";
+"use client"
 
-import Link from "next/link";
-import { BarChart3, Package2, Plus, Lock  } from "lucide-react";
-import { useHasStore } from "~/hooks/useHasStore";
+import Link from "next/link"
+import { BarChart3, Package2, Plus, Lock, ShoppingBag } from "lucide-react"
+import { useHasStore } from "~/hooks/useHasStore"
 
 import {
   SidebarGroup,
@@ -12,7 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "~/components/ui/sidebar";
+} from "~/components/ui/sidebar"
 
 const items = [
   {
@@ -33,7 +33,13 @@ const items = [
     icon: Plus,
     allowWithoutStore: false
   },
-];
+  {
+    title: "Orders",
+    href: "/store-management/orders",
+    icon: ShoppingBag,
+    allowWithoutStore: false
+  },
+]
 
 export function SidebarNav() {
   const { hasStore } = useHasStore();

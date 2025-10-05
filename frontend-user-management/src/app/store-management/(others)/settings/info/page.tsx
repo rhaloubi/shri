@@ -85,12 +85,8 @@ export default function StoreInfoPage() {
       }
 
       const data = await response.json()
-      console.log("Store owner full response:", data)
-      console.log("Store owner first item:", data[0])
-      console.log("Type of data:", Array.isArray(data) ? 'array' : typeof data)
       
       const ownerData = Array.isArray(data) ? data[0] : data
-      console.log("Setting store owner to:", ownerData)
       setStoreOwner(ownerData)
     } catch (error) {
       console.error("Error fetching store owner:", error)
@@ -127,7 +123,6 @@ export default function StoreInfoPage() {
       }
 
       const data = await response.json()
-      console.log("Store details response:", data)
       setStoreDetails(data[0])
     } catch (error) {
       console.error("Error fetching store details:", error)
