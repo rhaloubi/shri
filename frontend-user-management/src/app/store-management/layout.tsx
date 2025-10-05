@@ -1,5 +1,4 @@
 import type React from "react"
-import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "~/components/auth/auth-provider"
 import { Suspense } from "react"
 import { ThemeProvider } from "~/components/theme-provider"
@@ -17,7 +16,6 @@ export default function RootLayout({
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
         </Suspense>
-        <Analytics />
     </>
   )
 }

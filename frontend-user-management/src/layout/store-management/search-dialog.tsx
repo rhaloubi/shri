@@ -26,12 +26,16 @@ const items = [
     allowWithoutStore: false
   },
   {
-    name: "Change-Password",
+    name: "Settings/Change-Password",
     allowWithoutStore: true
   },
   {
-    name: "Profile",
+    name: "Settings/Profile",
     allowWithoutStore: true
+  },
+  {
+    name: "Settings/Info",
+    allowWithoutStore: false
   },
 ];
 

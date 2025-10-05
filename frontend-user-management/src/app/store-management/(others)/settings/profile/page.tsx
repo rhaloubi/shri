@@ -1,8 +1,8 @@
 "use client"
 
-import { User, KeyRound } from 'lucide-react'
-import { Button } from "../../../../components/ui/button"
-import { Input } from "../../../../components/ui/input"
+import { User, KeyRound , Building2 } from 'lucide-react'
+import { Button } from "../../../../../components/ui/button"
+import { Input } from "../../../../../components/ui/input"
 import { useRouter } from "next/navigation"
 import {  useSession } from "~/lib/auth-client";
 
@@ -42,6 +42,14 @@ export default function ProfilePage() {
             >
               <KeyRound className="mr-2" /> 
               Password
+            </Button>
+             <Button
+              variant="ghost"
+              className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
+              onClick={() => router.push('/store-management/settings/info')}
+            >
+              <Building2 className="mr-2" />
+              Store Info
             </Button>
           </div>
 

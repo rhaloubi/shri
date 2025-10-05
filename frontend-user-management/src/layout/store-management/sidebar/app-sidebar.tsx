@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings, UserPen, KeyRound } from "lucide-react";
+import { Settings, UserPen, KeyRound, Info } from "lucide-react";
 import {  useSession } from "~/lib/auth-client";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
@@ -21,8 +21,9 @@ const data = {
       icon: Settings,
       isActive: false,
       items: [
-        { title: "Profile", url: "profile", icon: UserPen },
-        { title: "Password", url: "change-password", icon: KeyRound },
+        { title: "Profile", url: "settings/profile", icon: UserPen },
+        { title: "Password", url: "settings/change-password", icon: KeyRound },
+        { title: "Info", url: "settings/info", icon: Info },
       ],
     },
   ],

@@ -10,11 +10,7 @@ export const HasStoreProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get the cookie - note the exact name from your screenshot
         const token = getCookie('better-auth.jwt');
-        console.log('All cookies:', document.cookie);
-
-
         
         if (!token) {
           console.warn('No auth token found');
@@ -22,9 +18,8 @@ export const HasStoreProvider = ({ children }: { children: React.ReactNode }) =>
           return;
         }
 
-        console.log('Token found, making request...');
-
-        const res = await fetch("http://localhost:8000/api/has-store", {
+        // Use the correct API URL
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/has-store`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -32,6 +27,7 @@ export const HasStoreProvider = ({ children }: { children: React.ReactNode }) =>
             'Content-Type': 'application/json',
           },
           credentials: 'include',
+          cache: 'no-store'
         });
         
         if (!res.ok) {
@@ -42,7 +38,6 @@ export const HasStoreProvider = ({ children }: { children: React.ReactNode }) =>
         }
         
         const data = await res.json();
-        console.log('Store status:', data);
         setHasStore(data.hasStore);
       } catch (err) {
         console.error('Error checking store status:', err);
