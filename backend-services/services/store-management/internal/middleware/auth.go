@@ -58,8 +58,6 @@ func (m *AuthenticationMiddleware) ValidateToken(next http.HandlerFunc) http.Han
 		set := jwk.NewSet()
 		set.Add(m.key)
 
-		log.Println("DEBUG: Parsing JWT:", tokenStr)
-
 		token, err := jwt.Parse([]byte(tokenStr), jwt.WithKeySet(set))
 		if err != nil {
 			log.Printf("DEBUG: JWT parse/verify failed: %v", err)
@@ -81,9 +79,6 @@ func (m *AuthenticationMiddleware) ValidateToken(next http.HandlerFunc) http.Han
 			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
 			return
 		}
-
-		// Debug: print extracted claims
-		log.Printf("DEBUG: Claims: ID=%s, Email=%s, Role=%s", claims.ID, claims.Email, claims.Role)
 
 		// Store claims in context
 		ctx := context.WithValue(r.Context(), "claims", claims)

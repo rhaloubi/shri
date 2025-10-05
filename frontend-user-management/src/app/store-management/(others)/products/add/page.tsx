@@ -200,7 +200,7 @@ export default function AddProductPage() {
       }
 
       toast.success("Product created successfully")
-      router.push("/stores-management/products")
+      router.push("/store-management/products")
       router.refresh()
     } catch (error) {
       console.error("Error creating product:", error)

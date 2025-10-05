@@ -96,7 +96,7 @@ func (h *ImageHandler) SetPrimaryImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	imageID := vars["id"]
+	imageID := vars["imageId"]
 	productID := vars["productId"]
 
 	// Verify product belongs to the store
@@ -142,7 +142,7 @@ func (h *ImageHandler) UpdateImageAltText(w http.ResponseWriter, r *http.Request
 	}
 
 	vars := mux.Vars(r)
-	imageID := vars["id"]
+	imageID := vars["imageId"]
 	productID := vars["productId"]
 
 	// Verify product belongs to the store
@@ -182,7 +182,7 @@ func (h *ImageHandler) DeleteImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	imageID := vars["id"]
+	imageID := vars["imageId"]
 	productID := vars["productId"]
 
 	// Verify product belongs to the store
