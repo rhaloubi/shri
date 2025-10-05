@@ -215,7 +215,7 @@ export default function AddProductPage() {
       <Toaster position="top-right" expand={true} richColors />
       <div className="w-full">
         <div className="flex items-center gap-4 mb-2">
-          <Button variant="ghost" className="group relative p-2" onClick={() => router.push("/stores-management/products")}>
+          <Button variant="ghost" className="group relative p-2" onClick={() => router.push("/store-management/products")}>
             <ArrowLeft className="h-5 w-5" />
             <span className="absolute left-10 bg-secondary text-secondary-foreground text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               Back to Products

@@ -40,13 +40,18 @@ interface Order {
 
 export default function OrdersPage() {
   const router = useRouter()
-  const { session } = useSession()
+  const { data: session } = useSession()  // Updated to match products page
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedStatus, setSelectedStatus] = useState<string>("")
+  const [selectedStatus, setSelectedStatus] = useState<string>("all")
 
   const fetchOrders = async () => {
+    if (!session?.user?.id) {
+      setLoading(false)
+      return
+    }
+
     try {
       const token = getCookie("better-auth.jwt")
       if (!token) throw new Error("Authentication token not found")
@@ -75,12 +80,8 @@ export default function OrdersPage() {
   }
 
   useEffect(() => {
-    if (session) {
-      void fetchOrders()
-    } else {
-      setLoading(false)
-    }
-  }, [session])
+    void fetchOrders()
+  }, [session?.user?.id]) // Updated dependency array to match products page pattern
 
   if (!session) {
     return (
@@ -104,8 +105,8 @@ export default function OrdersPage() {
             View and manage your orders
           </p>
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
           <Card className="sm:p-1">
             <CardHeader className="pb-1 sm:pb-2 space-y-0 p-4 sm:p-6">
               <CardTitle className="text-xs sm:text-sm font-medium">Total Orders</CardTitle>
@@ -123,26 +124,6 @@ export default function OrdersPage() {
             <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
               <div className="text-xl sm:text-2xl font-bold">{getStatusCount("pending")}</div>
               <p className="text-[10px] sm:text-xs text-muted-foreground">Pending orders</p>
-            </CardContent>
-          </Card>
-
-          <Card className="sm:p-1">
-            <CardHeader className="pb-1 sm:pb-2 space-y-0 p-4 sm:p-6">
-              <CardTitle className="text-xs sm:text-sm font-medium">Confirmed</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{getStatusCount("confirmed")}</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Confirmed orders</p>
-            </CardContent>
-          </Card>
-
-          <Card className="sm:p-1">
-            <CardHeader className="pb-1 sm:pb-2 space-y-0 p-4 sm:p-6">
-              <CardTitle className="text-xs sm:text-sm font-medium">Shipped</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
-              <div className="text-xl sm:text-2xl font-bold">{getStatusCount("shipped")}</div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Shipped orders</p>
             </CardContent>
           </Card>
 
@@ -175,7 +156,7 @@ export default function OrdersPage() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="confirmed">Confirmed</SelectItem>
                 <SelectItem value="shipped">Shipped</SelectItem>
