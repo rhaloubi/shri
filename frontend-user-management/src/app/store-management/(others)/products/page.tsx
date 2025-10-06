@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import LoadingPage from "~/components/loading-page"
 
 interface Product {
   ID: string;
@@ -140,11 +141,7 @@ export default function ProductsPage() {
   };
 
   if (!session) {
-    return (
-      <div className="flex items-center justify-center h-[50vh]">
-        <p className="text-muted-foreground">Please sign in to view products</p>
-      </div>
-    );
+    return <LoadingPage />
   }
 
   return (

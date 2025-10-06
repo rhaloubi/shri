@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~
 import { ArrowLeft } from "lucide-react"
 import { getCookie } from "cookies-next"
 import { Toaster, toast } from "sonner"
+import LoadingPage from "~/components/loading-page"
+import { useSession } from "~/lib/auth-client"
 
 interface Product {
   ID: string
@@ -38,6 +40,7 @@ interface PageProps {
 
 export default function EditProductPage({ params }: PageProps) {
   const resolvedParams = React.use(params)
+  const { data: session } = useSession()
   const productId = resolvedParams.id
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -144,6 +147,10 @@ export default function EditProductPage({ params }: PageProps) {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (!session) {
+    return <LoadingPage />
   }
 
   return (

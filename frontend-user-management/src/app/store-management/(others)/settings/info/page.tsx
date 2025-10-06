@@ -10,6 +10,7 @@ import { getCookie } from "cookies-next"
 import { toast, Toaster } from "sonner"
 import { useSession } from "~/lib/auth-client"
 import { useRouter } from "next/navigation"
+import LoadingPage from "~/components/loading-page"
 
 type StoreOwner = {
   ID: string
@@ -29,6 +30,7 @@ type StoreDetails = {
 
 export default function StoreInfoPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [storeOwner, setStoreOwner] = useState<StoreOwner | null>(null)
   const [storeDetails, setStoreDetails] = useState<StoreDetails | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -235,7 +237,7 @@ export default function StoreInfoPage() {
   }
 
   if (!session) {
-    return null
+    return <LoadingPage />
   }
 
   if (isLoading) {

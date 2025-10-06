@@ -13,6 +13,8 @@ import Image from "next/image"
 import { getCookie } from "cookies-next"
 import { Toaster, toast } from "sonner"
 
+import LoadingPage from "~/components/loading-page"
+
 const MAX_IMAGES = 10
 
 type ImageEntry = {
@@ -33,6 +35,7 @@ interface ProductFormData {
 
 export default function AddProductPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<ImageEntry[]>([])
   

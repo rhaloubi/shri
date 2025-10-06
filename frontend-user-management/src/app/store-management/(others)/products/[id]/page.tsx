@@ -10,6 +10,7 @@ import { getCookie } from "cookies-next"
 import { Button } from "~/components/ui/button"
 import { ProductImageGallery } from "~/components/store-management/product/product-image-gallery"
 import { ProductDetailsSection } from "~/components/store-management/product/product-details-section"
+import LoadingPage from "~/components/loading-page"
 
 interface ProductImage {
   ID: string
@@ -39,6 +40,7 @@ interface PageProps {
 
 export default function ProductDetailsPage({ params }: PageProps) {
   const { id: productId } = React.use(params)
+  const { data: session } = useSession()
   const router = useRouter()
   const [product, setProduct] = useState<Product | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -237,6 +239,10 @@ export default function ProductDetailsPage({ params }: PageProps) {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     )
+  }
+
+  if (!session) {
+    return <LoadingPage />
   }
 
   if (!product) {

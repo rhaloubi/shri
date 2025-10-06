@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
+import LoadingPage from "~/components/loading-page"
 
 interface OrderItem {
   ID: string
@@ -84,11 +85,7 @@ export default function OrdersPage() {
   }, [session?.user?.id]) // Updated dependency array to match products page pattern
 
   if (!session) {
-    return (
-      <div className="flex items-center justify-center h-[50vh]">
-        <p className="text-muted-foreground">Please sign in to view orders</p>
-      </div>
-    )
+    return <LoadingPage />
   }
 
   const getStatusCount = (status: Order["Status"]) => {

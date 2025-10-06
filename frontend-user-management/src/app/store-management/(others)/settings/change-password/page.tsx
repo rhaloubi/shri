@@ -6,6 +6,7 @@ import { Input } from "../../../../../components/ui/input"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { authClient, useSession } from "~/lib/auth-client"
+import LoadingPage from "~/components/loading-page"
 
 import {
   AlertDialog,
@@ -19,8 +20,8 @@ import {
 } from "../../../../../components/ui/alert-dialog"
 
 export default function ChangePasswordPage() {
-  const router = useRouter();
-  const { data: session } = useSession();
+  const router = useRouter()
+  const { data: session } = useSession()
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,8 +30,7 @@ export default function ChangePasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!session) {
-    router.push('/store-management/login');
-    return null;
+    return <LoadingPage />
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

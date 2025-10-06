@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Toaster } from "sonner"
 import { AccountForm } from "~/components/create-store/account-form"
 import { StoreForm } from "~/components/create-store/store-form"
+import LoadingPage from "~/components/loading-page"
 
 export default function CreateStorePage() {
   const router = useRouter()
@@ -21,11 +22,7 @@ export default function CreateStorePage() {
   }
 
   if (!session) {
-    return (
-      <div className="flex items-center justify-center h-[50vh]">
-        <p className="text-muted-foreground">Please sign in to create a store</p>
-      </div>
-    )
+    return <LoadingPage />
   }
 
   return (

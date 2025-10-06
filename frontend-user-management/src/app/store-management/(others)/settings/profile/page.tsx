@@ -5,13 +5,14 @@ import { Button } from "../../../../../components/ui/button"
 import { Input } from "../../../../../components/ui/input"
 import { useRouter } from "next/navigation"
 import {  useSession } from "~/lib/auth-client";
+import LoadingPage from "~/components/loading-page"
 
 export default function ProfilePage() {
-  const router = useRouter();
-  const { data: session } = useSession();
+  const router = useRouter()
+  const { data: session } = useSession()
 
   if (!session) {
-    return null;
+    return <LoadingPage />
   }
 
   const { user } = session;
@@ -94,4 +95,4 @@ export default function ProfilePage() {
       </div>
     </main>
   )
-} 
+}
