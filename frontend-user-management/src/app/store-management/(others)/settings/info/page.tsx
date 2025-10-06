@@ -135,6 +135,13 @@ export default function StoreInfoPage() {
   const handleUpdateStoreOwner = async () => {
     if (!editedOwner || !storeOwner) return
 
+    // Validate phone number format
+    const phoneRegex = /^\+[0-9]{12}$/
+    if (!phoneRegex.test(editedOwner.Phone)) {
+      toast.error("Phone number must be in format: +212XXXXXXXXX")
+      return
+    }
+
     try {
       const token = getCookie("better-auth.jwt")
       if (!token) {
@@ -157,10 +164,12 @@ export default function StoreInfoPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update store owner information")
+        const errorData = await response.text()
+        throw new Error(errorData || "Failed to update store owner information")
       }
 
-      await fetchStoreOwner()
+      const updatedData = await response.json()
+      setStoreOwner(updatedData) // Update the store owner state with the response data
       setIsEditingOwner(false)
       setEditedOwner({
         ID: '',
@@ -184,31 +193,31 @@ export default function StoreInfoPage() {
         return
       }
 
+      // Create FormData object
+      const formData = new FormData()
+      formData.append("name", editedStore.Name)
+      formData.append("description", editedStore.Description)
+      formData.append("street", editedStore.Street)
+      formData.append("city", editedStore.City)
+      formData.append("state", editedStore.State)
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/${storeDetails.ID}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
+          // Remove Content-Type header to let the browser set it with the boundary
         },
-        body: JSON.stringify({
-          name: editedStore.Name,
-          description: editedStore.Description,
-          street: editedStore.Street,
-          city: editedStore.City,
-          state: editedStore.State,
-          is_active: editedStore.IsActive,
-        }),
+        body: formData,
         credentials: 'include',
       })
-
+      
       if (!response.ok) {
-        throw new Error("Failed to update store details")
+        const errorData = await response.text()
+        throw new Error(errorData || "Failed to update store details")
       }
-
+      
       await fetchStoreDetails()
       setIsEditingStore(false)
-      // Reset to empty object instead of null
       setEditedStore({
         ID: '',
         Name: '',
@@ -327,7 +336,14 @@ export default function StoreInfoPage() {
                     onChange={(e) => setEditedOwner(prev => ({ ...prev, Phone: e.target.value }))}
                     disabled={!isEditingOwner}
                     className="mt-2 w-full sm:w-2/3 lg:w-1/2"
+                    placeholder="+212600000000"
+                    pattern="^\+[0-9]{12}$"
                   />
+                  {isEditingOwner && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Format: +212XXXXXXXXX (Morocco)
+                    </p>
+                  )}
                 </div>
 
                 {isEditingOwner && (
