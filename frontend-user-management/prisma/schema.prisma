@@ -22,10 +22,9 @@ model User {
   sessions      Session[]
   accounts      Account[]
   addresses     Address[]
-
-  banned     Boolean?
-  banReason  String?
-  banExpires DateTime?
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
 
   @@unique([email])
   @@map("user")
@@ -102,4 +101,27 @@ model Jwks {
   createdAt  DateTime
 
   @@map("jwks")
+}
+
+model StoreSettings {
+  id         String  @id @default(cuid())
+  storeId    String  @unique // 
+  templateId String? @default("default")
+
+  primaryColor   String?  @default("#000000") // Default black
+  secondaryColor String?  @default("#ffffff") // Default white
+  bannerImageUrl String?
+  fontFamily     String?  @default("Inter") // Default system font
+  // Social Media
+  facebookUrl    String?
+  instagramUrl   String?
+  twitterUrl     String?
+  // UI Settings
+  showSearchBar  Boolean  @default(true)
+  showFooter     Boolean  @default(true)
+  // Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("store_settings")
 }

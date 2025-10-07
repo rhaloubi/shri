@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"store-management/internal/domain"
 	"store-management/internal/middleware"
@@ -263,6 +264,42 @@ func (h *StoreHandler) GetStoresByOwner(w http.ResponseWriter, r *http.Request) 
 	json.NewEncoder(w).Encode(stores)
 }
 
+func (h *StoreHandler) GetStoreById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var store domain.Store
+	result := h.db.First(&store, "id = ?", id)
+	if result.Error != nil {
+		http.Error(w, "Store not found", http.StatusNotFound)
+		return
+	}
+	response := struct {
+		ID          string    `json:"id"`
+		Name        string    `json:"name"`
+		Description string    `json:"description"`
+		Street      string    `json:"street"`
+		City        string    `json:"city"`
+		State       string    `json:"state"`
+		LogoURL     string    `json:"logoURL"`
+		CreatedAt   time.Time `json:"createdAt"`
+		UpdatedAt   time.Time `json:"updatedAt"`
+	}{
+		ID:          store.ID,
+		Name:        store.Name,
+		Description: store.Description,
+		Street:      store.Street,
+		City:        store.City,
+		State:       store.State,
+		LogoURL:     store.LogoURL,
+		CreatedAt:   store.CreatedAt,
+		UpdatedAt:   store.UpdatedAt,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func (h *StoreHandler) HasStore(w http.ResponseWriter, r *http.Request) {
 	// Get claims from context
 	claims, ok := r.Context().Value("claims").(middleware.Claims)
@@ -276,7 +313,10 @@ func (h *StoreHandler) HasStore(w http.ResponseWriter, r *http.Request) {
 	result := h.db.Where("user_id = ?", claims.ID).First(&storeOwner)
 	if result.Error != nil {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]bool{"hasStore": false})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"hasStore": false,
+			"storeId":  nil,
+		})
 		return
 	}
 
@@ -285,5 +325,19 @@ func (h *StoreHandler) HasStore(w http.ResponseWriter, r *http.Request) {
 	result = h.db.Where("store_owner_id = ?", storeOwner.ID).First(&store)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]bool{"hasStore": result.Error == nil})
+
+	if result.Error != nil {
+		// No store found
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"hasStore": false,
+			"storeId":  nil,
+		})
+		return
+	}
+
+	// Store found
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"hasStore": true,
+		"storeId":  store.ID,
+	})
 }
