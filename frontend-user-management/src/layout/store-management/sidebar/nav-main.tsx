@@ -1,7 +1,9 @@
 
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ChevronRight ,Lock } from "lucide-react";
+import type { LucideIcon  } from "lucide-react";
+import { useHasStore } from "~/hooks/useHasStore"
+
 
 import {
   Collapsible,
@@ -36,6 +38,7 @@ interface NavMainProps {
 }
 
 export function NavMain({ items }: NavMainProps) {
+  const { hasStore } = useHasStore()
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-base">platform</SidebarGroupLabel>
@@ -59,6 +62,7 @@ export function NavMain({ items }: NavMainProps) {
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
+                    {(subItem.allowWithoutStore || hasStore) ? (
                       <Link
                         href={`/store-management/${subItem.url}`}
                         className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-800"
@@ -66,6 +70,14 @@ export function NavMain({ items }: NavMainProps) {
                         {subItem.icon && <subItem.icon className="size-5" />}
                         <span>{subItem.title}</span>
                       </Link>
+                    ):(
+                      <div
+                        className="flex w-full items-center text-muted-foreground gap-2 rounded-md px-2 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-800 cursor-not-allowed"
+                      >
+                        <Lock className="size-5 " />
+                        <span>{subItem.title}</span>
+                      </div>
+                    )}
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>

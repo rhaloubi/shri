@@ -6,10 +6,12 @@ import { Input } from "../../../../../components/ui/input"
 import { useRouter } from "next/navigation"
 import {  useSession } from "~/lib/auth-client";
 import LoadingPage from "~/components/loading-page"
+import { useHasStore } from "~/hooks/useHasStore"
 
 export default function ProfilePage() {
   const router = useRouter()
   const { data: session } = useSession()
+  const { hasStore } = useHasStore()
 
   if (!session) {
     return <LoadingPage />
@@ -44,6 +46,7 @@ export default function ProfilePage() {
               <KeyRound className="mr-2" /> 
               Password
             </Button>
+            {hasStore ? (
              <Button
               variant="ghost"
               className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
@@ -52,6 +55,7 @@ export default function ProfilePage() {
               <Building2 className="mr-2" />
               Store Info
             </Button>
+            ) : null}
           </div>
 
           {/* Main Content */}

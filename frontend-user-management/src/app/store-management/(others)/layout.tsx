@@ -21,7 +21,7 @@ export default function AdminLayout({
   }, [])
 
   if (!mounted) {
-    return null // Prevent hydration mismatch by not rendering until client-side
+    return null
   }
 
   return (

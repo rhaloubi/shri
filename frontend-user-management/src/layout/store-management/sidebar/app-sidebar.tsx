@@ -17,9 +17,9 @@ const data = {
       icon: Settings,
       isActive: false,
       items: [
-        { title: "Profile", url: "settings/profile", icon: UserPen },
-        { title: "Password", url: "settings/change-password", icon: KeyRound },
-        { title: "Info", url: "settings/info", icon: Info },
+        { title: "Profile", url: "settings/profile", icon: UserPen, allowWithoutStore: true },
+        { title: "Password", url: "settings/change-password", icon: KeyRound, allowWithoutStore: true },
+        { title: "Info", url: "settings/info", icon: Info, allowWithoutStore: false },
       ],
     },
   ],

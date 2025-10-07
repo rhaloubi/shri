@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { authClient, useSession } from "~/lib/auth-client"
 import LoadingPage from "~/components/loading-page"
-
+import { useHasStore } from "~/hooks/useHasStore"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +22,7 @@ import {
 export default function ChangePasswordPage() {
   const router = useRouter()
   const { data: session } = useSession()
+  const { hasStore } = useHasStore()
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -103,6 +104,7 @@ export default function ChangePasswordPage() {
               <KeyRound className="mr-2" /> 
               Password
             </Button>
+            {hasStore ? (
              <Button
               variant="ghost"
               className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
@@ -111,6 +113,7 @@ export default function ChangePasswordPage() {
               <Building2 className="mr-2" />
               Store Info
             </Button>
+            ) : null}
           </div>
 
           {/* Main Content */}
