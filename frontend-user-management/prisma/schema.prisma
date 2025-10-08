@@ -110,7 +110,6 @@ model StoreSettings {
 
   primaryColor   String?  @default("#000000") // Default black
   secondaryColor String?  @default("#ffffff") // Default white
-  bannerImageUrl String?
   fontFamily     String?  @default("Inter") // Default system font
   // Social Media
   facebookUrl    String?

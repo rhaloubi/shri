@@ -7,6 +7,7 @@ import Header from "~/layout/store-management/header"
 import HasStore from "~/components/store-management/hasStore"
 import { SidebarProvider } from "~/components/ui/sidebar"
 import { HasStoreProvider } from "~/hooks/useHasStore"
+import { Toaster } from "~/components/ui/sonner"
 import { useEffect, useState } from "react"
 
 export default function AdminLayout({
@@ -26,6 +27,7 @@ export default function AdminLayout({
 
   return (
     <HasStoreProvider>
+      <Toaster />
       <SidebarProvider>
         <HasStore />
         <div className="flex max-w-none sm:max-w-screen min-w-none sm:min-w-screen min-h-screen">

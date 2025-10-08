@@ -8,6 +8,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } fr
 import { SidebarNav } from "./nav-dash"
 import { StoreDisplay } from "./store-display"
 import { Spinner } from "~/components/ui/spinner"
+import { SidebarEstore } from "./e-store"
 
 const data = {
   others: [
@@ -38,6 +39,7 @@ export function AppSidebar({ ...props }) {
       <SidebarContent>
         <SidebarNav />
         <NavMain items={data.others} />
+        <SidebarEstore />
       </SidebarContent>
       <SidebarFooter className="pb-3">{!session ? <div className="flex items-center gap-3"><Spinner /><span>Loading...</span></div>: <NavUser user={userData} />}</SidebarFooter>
       <SidebarRail />

@@ -10,7 +10,6 @@ interface StoreSettingsInput {
   templateId?: string;
   primaryColor?: string;
   secondaryColor?: string;
-  bannerImageUrl?: string;
   fontFamily?: string;
   facebookUrl?: string;
   instagramUrl?: string;
@@ -48,7 +47,6 @@ export async function createWebStore(input: StoreSettingsInput, userId: string) 
         templateId: input.templateId,
         primaryColor: input.primaryColor,
         secondaryColor: input.secondaryColor,
-        bannerImageUrl: input.bannerImageUrl,
         fontFamily: input.fontFamily,
         facebookUrl: input.facebookUrl,
         instagramUrl: input.instagramUrl,
@@ -92,7 +90,6 @@ export async function updateWebStore( input: StoreSettingsInput) {
         templateId: input.templateId,
         primaryColor: input.primaryColor,
         secondaryColor: input.secondaryColor,
-        bannerImageUrl: input.bannerImageUrl,
         fontFamily: input.fontFamily,
         facebookUrl: input.facebookUrl,
         instagramUrl: input.instagramUrl,
