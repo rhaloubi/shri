@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { getWebStore } from "~/server/store/store";
+import { getWebStore } from "~/server/e-store/store";
 
 export async function GET(
   req: NextRequest,

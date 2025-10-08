@@ -162,3 +162,40 @@ export async function patchWebStore( input: Partial<StoreSettingsInput>) {
     throw error;
   }
 }
+
+export async function geteEStoreByToken() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+      headers: {
+        'Authorization': `Bearer ${headers().get('authorization')?.split(' ')[1] || ''}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to verify store access');
+    }
+
+    const hasStoreData = await response.json() as HasStoreResponse;
+    if (hasStoreData.hasStore !== true || !hasStoreData.storeId) {
+      return { hasEStore: false };
+    }
+    
+    // Get store settings without authorization
+    const storeSettings = await db.storeSettings.findUnique({
+      where: {
+        storeId: hasStoreData.storeId
+      },
+    });
+
+    if (!storeSettings) {
+      return { hasEStore: false };
+    }
+
+    return {
+      ...storeSettings,
+      hasEStore: true
+    };
+  } catch (error) {
+    console.error('Error fetching web store:', error);
+    return { hasEStore: false };
+  }
+}

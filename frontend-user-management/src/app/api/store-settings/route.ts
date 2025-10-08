@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { createWebStore, updateWebStore, patchWebStore } from "~/server/store/store";
+import { createWebStore, updateWebStore, patchWebStore, geteEStoreByToken } from "~/server/e-store/store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -57,6 +57,24 @@ export async function PATCH(req: NextRequest) {
     return Response.json(result);
   } catch (error) {
     console.error("Error in PATCH /api/store-settings:", error);
+    if (error instanceof Error) {
+      return Response.json({ error: error.message }, { status: 400 });
+    }
+    return Response.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader) {
+      return Response.json({ error: "Authorization header required" }, { status: 401 });
+    }
+
+    const result = await geteEStoreByToken();
+    return Response.json(result);
+  } catch (error) {
+    console.error("Error in GET /api/store-settings:", error);
     if (error instanceof Error) {
       return Response.json({ error: error.message }, { status: 400 });
     }
