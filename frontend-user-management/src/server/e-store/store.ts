@@ -111,7 +111,7 @@ export async function getWebStore(id: string) {
     // Get store settings without authorization
     const storeSettings = await db.storeSettings.findUnique({
       where: {
-        id: id ,
+        storeId: id ,
       },
     });
 

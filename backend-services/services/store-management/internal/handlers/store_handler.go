@@ -274,8 +274,16 @@ func (h *StoreHandler) GetStoreById(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Store not found", http.StatusNotFound)
 		return
 	}
+	var storeOwner domain.StoreOwner
+	result2 := h.db.First(&storeOwner, "id = ?", store.StoreOwnerID)
+	if result2.Error != nil {
+		http.Error(w, "Store owner not found", http.StatusNotFound)
+		return
+	}
 	response := struct {
 		ID          string    `json:"id"`
+		UserID      string    `json:"userID"`
+		PhoneNumber string    `json:"phoneNumber"`
 		Name        string    `json:"name"`
 		Description string    `json:"description"`
 		Street      string    `json:"street"`
@@ -286,6 +294,8 @@ func (h *StoreHandler) GetStoreById(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt   time.Time `json:"updatedAt"`
 	}{
 		ID:          store.ID,
+		UserID:      storeOwner.UserID,
+		PhoneNumber: storeOwner.Phone,
 		Name:        store.Name,
 		Description: store.Description,
 		Street:      store.Street,
