@@ -1,4 +1,4 @@
-import { betterAuth, number } from "better-auth"
+import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
 import { jwt } from "better-auth/plugins"
@@ -6,6 +6,9 @@ import { admin } from "better-auth/plugins"
 import { db } from "~/server/db"
 
 export const auth = betterAuth({
+  // Set baseURL for server-side auth operations
+  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
+  
   database: prismaAdapter(db, {
     provider: "postgresql",
   }),
@@ -52,9 +55,8 @@ export const auth = betterAuth({
     }),
     admin({
       adminUserIds: [], 
-         }),
-        nextCookies(),
-
+    }),
+    nextCookies(),
   ],
 })
 
