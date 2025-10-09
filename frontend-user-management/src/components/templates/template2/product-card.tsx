@@ -21,7 +21,7 @@ export function BlueProductCard({ product, settings }: ProductCardProps) {
         }}
       >
         {/* Category Badge */}
-        {product.category && (
+        {product.Category && (
           <div 
             className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full text-xs font-bold"
             style={{ 
@@ -29,15 +29,15 @@ export function BlueProductCard({ product, settings }: ProductCardProps) {
               color: settings.secondaryColor
             }}
           >
-            {product.category}
+            {product.Category}
           </div>
         )}
 
         {/* Image */}
         <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden">
           <Image
-            src={productImage?.url || "/placeholder.svg"}
-            alt={productImage?.altText || product.name}
+            src={productImage?.URL || "/placeholder.svg"}
+            alt={productImage?.AltText || product.Name}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
@@ -64,7 +64,7 @@ export function BlueProductCard({ product, settings }: ProductCardProps) {
             className="text-sm font-semibold mb-2"
             style={{ color: settings.primaryColor }}
           >
-            {product.category}
+            {product.Category}
           </p>
           <h3 
             className="text-xl font-bold mb-3"
@@ -77,7 +77,7 @@ export function BlueProductCard({ product, settings }: ProductCardProps) {
               className="text-2xl font-black"
               style={{ color: settings.primaryColor }}
             >
-              ${product.price.toFixed(2)}
+              ${(product.Price ?? 0).toFixed(2)}
             </span>
             <button 
               className="text-sm font-semibold transition-colors"

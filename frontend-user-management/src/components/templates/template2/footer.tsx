@@ -9,9 +9,9 @@ interface FooterProps {
 
 export function Footer({ store, settings }: FooterProps) {
   return (
-    <footer className="bg-black text-white">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+    <footer className="border-t border-gray-300 text-white">
+      <div className="container mx-auto px-6 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
             <h3 
@@ -99,42 +99,10 @@ export function Footer({ store, settings }: FooterProps) {
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h4 
-              className="text-xl font-bold mb-4"
-              style={{ color: settings.primaryColor }}
-            >
-              Newsletter
-            </h4>
-            <p className="text-gray-400 mb-4">Subscribe to get special offers and updates.</p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-gray-400 focus:outline-none"
-                style={{ 
-                  '&:focus': {
-                    borderColor: settings.primaryColor
-                  }
-                }}
-              />
-              <button 
-                className="px-6 py-3 rounded-full font-bold transition-colors"
-                style={{ 
-                  backgroundColor: settings.primaryColor,
-                  color: settings.secondaryColor,
-                  '&:hover': { opacity: 0.8 }
-                }}
-              >
-                Join
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/20 pt-8 text-center text-gray-400">
+        <div className="border-t border-gray-300 pt-8 text-center text-gray-400">
           <p>&copy; {new Date().getFullYear()} {store.name}. All rights reserved.</p>
         </div>
       </div>

@@ -8,7 +8,7 @@ interface FeaturedProductProps {
 }
 
 export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
-  const productImage = product.images?.find(img => img.isPrimary) || product.images?.[0]
+  const productImage = product.images?.find(img => img.IsPrimary) || product.images?.[0]
 
   return (
     <section className="py-24 bg-white">
@@ -32,8 +32,8 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
             />
             <div className="relative bg-gray-100 rounded-3xl overflow-hidden aspect-square">
               <Image
-                src={productImage?.url || "/placeholder.svg"}
-                alt={productImage?.altText || product.name}
+                src={productImage?.URL || "/placeholder.svg"}
+                alt={productImage?.AltText || product.Name}
                 fill
                 className="object-cover"
               />
@@ -70,24 +70,9 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
               {product.name}
             </h3>
 
-            <div className="flex items-center gap-2">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    className="h-5 w-5" 
-                    style={{ 
-                      fill: settings.primaryColor,
-                      color: settings.primaryColor
-                    }}
-                  />
-                ))}
-              </div>
-              <span className="text-gray-600">(128 reviews)</span>
-            </div>
 
             <p className="text-lg text-gray-600 leading-relaxed">
-              {product.description}
+              {product.Description}
             </p>
 
             <div className="flex items-baseline gap-3">
@@ -95,7 +80,7 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
                 className="text-5xl font-black"
                 style={{ color: settings.primaryColor }}
               >
-                ${product.price.toFixed(2)}
+                ${(product.Price ?? 0).toFixed(2)}
               </span>
             </div>
 
@@ -109,19 +94,6 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
               >
                 <ShoppingBag className="h-5 w-5" />
                 Add to Cart
-              </button>
-              <button 
-                className="w-full border-2 py-4 rounded-full font-bold text-lg transition-all duration-300"
-                style={{ 
-                  borderColor: settings.primaryColor,
-                  color: settings.primaryColor,
-                  '&:hover': {
-                    backgroundColor: settings.primaryColor,
-                    color: settings.secondaryColor
-                  }
-                }}
-              >
-                View Details
               </button>
             </div>
           </div>

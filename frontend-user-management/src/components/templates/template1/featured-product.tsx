@@ -28,8 +28,8 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
               <div className="relative flex-1 aspect-square rounded-3xl overflow-hidden border-8 bg-[#E5E5E5]"
                 style={{ borderColor: settings.primaryColor }}>
                 <Image
-                  src={productImage?.url || "/placeholder.svg"}
-                  alt={productImage?.altText || product.name}
+                  src={productImage?.URL || "/placeholder.svg"}
+                  alt={productImage?.AltText || product.Name}
                   fill
                   className="object-cover"
                   priority
@@ -68,13 +68,13 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
                 className="font-black text-5xl sm:text-6xl md:text-7xl uppercase leading-none tracking-tighter mb-6"
                 style={{ color: settings.primaryColor }}
               >
-                {product.name}
+                {product.Name}
               </h3>
               <p className="text-2xl font-black mb-4" style={{ color: settings.primaryColor }}>
-                ${product.price.toFixed(2)}
+                ${(product.Price ?? 0).toFixed(2)}
               </p>
               <p className="text-base leading-relaxed" style={{ color: settings.primaryColor }}>
-                {product.description}
+                {product.Description}
               </p>
             </div>
 
@@ -91,18 +91,6 @@ export function FeaturedProduct({ product, settings }: FeaturedProductProps) {
                 }}
               >
                 ADD TO CART
-              </Button>
-              <Button
-                size="lg"
-                className="w-full text-xl px-8 py-7 font-black uppercase tracking-tight rounded-full"
-                style={{ 
-                  backgroundColor: settings.primaryColor,
-                  color: settings.secondaryColor,
-                  borderColor: settings.primaryColor,
-                  borderWidth: '4px'
-                }}
-              >
-                BUY IT NOW
               </Button>
             </div>
           </div>

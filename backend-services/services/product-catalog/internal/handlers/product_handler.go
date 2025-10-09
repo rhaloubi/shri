@@ -339,20 +339,9 @@ func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ProductHandler) GetProductsByStore(w http.ResponseWriter, r *http.Request) {
-	claims, ok := r.Context().Value("claims").(middleware.Claims)
-	if !ok || claims.ID == "" {
-		http.Error(w, "Unauthorized - Store access required", http.StatusUnauthorized)
-		return
-	}
 
 	vars := mux.Vars(r)
 	storeID := vars["storeId"]
-
-	// Verify user has access to the store
-	if storeID != claims.ID {
-		http.Error(w, "Forbidden - Access to store denied", http.StatusForbidden)
-		return
-	}
 
 	var products []domain.Product
 	if err := h.db.Preload("Images").Where("store_id = ?", storeID).Find(&products).Error; err != nil {

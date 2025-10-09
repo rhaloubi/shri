@@ -13,6 +13,7 @@ import { Button } from "~/components/ui/button"
 
 export default function CreateStorePage() {
   const [hasStore, setHasStore] = useState<boolean>(false)
+    const [storeId, setStoreId] = useState<string>("")
   const [isLoading, setIsLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
 
@@ -40,6 +41,7 @@ export default function CreateStorePage() {
         
         const data = await response.json()
         setHasStore(data.hasEStore ?? false)
+        setStoreId(data.storeId ?? "")
       } catch (error) {
         console.error('Error checking store status:', error)
         toast.error("Error", {
@@ -85,7 +87,7 @@ export default function CreateStorePage() {
                         <p className="text-muted-foreground text-sm mt-1">Manage your store configuration and settings</p>
                       </div>
                     </div>
-                    <Button size="lg" className="gap-2">
+                    <Button size="lg" className="gap-2" onClick={() => window.open(`/store/${storeId}`, '_blank')}>
                       <ExternalLink className="w-4 h-4" />
                       Visit Store
                     </Button>

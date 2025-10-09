@@ -51,7 +51,6 @@ export function Hero({ store, settings }: HeroProps) {
           <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight animate-fade-in-up">
             {store.name}
             <br />
-            <span style={{ color: settings.primaryColor }}>Premium Store</span>
           </h1>
 
           <p className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto animate-fade-in-up animation-delay-200 text-gray-300">

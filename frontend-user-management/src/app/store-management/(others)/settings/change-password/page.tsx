@@ -92,7 +92,7 @@ export default function ChangePasswordPage() {
             <Button 
               variant="ghost" 
               className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
-              onClick={() => router.push('/store-management/profile')}
+              onClick={() => router.push('/store-management/settings/profile')}
             >
               <User className="mr-2" /> 
               Profile

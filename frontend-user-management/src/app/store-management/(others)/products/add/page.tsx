@@ -12,6 +12,7 @@ import { ImagePlus, X, ArrowLeft, Star } from "lucide-react"
 import Image from "next/image"
 import { getCookie } from "cookies-next"
 import { Toaster, toast } from "sonner"
+import { useSession } from "~/lib/auth-client"
 
 import LoadingPage from "~/components/loading-page"
 

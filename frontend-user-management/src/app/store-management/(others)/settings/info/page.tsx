@@ -266,7 +266,7 @@ export default function StoreInfoPage() {
            <Button 
               variant="ghost" 
               className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
-              onClick={() => router.push('/store-management/profile')}
+              onClick={() => router.push('/store-management/settings/profile')}
             >
               <User className="mr-2" /> 
               Profile
@@ -274,7 +274,7 @@ export default function StoreInfoPage() {
             <Button 
               variant="ghost" 
               className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
-              onClick={() => router.push('/store-management/change-password')}
+              onClick={() => router.push('/store-management/settings/change-password')}
             >
               <KeyRound className="mr-2" /> 
               Password
@@ -282,7 +282,6 @@ export default function StoreInfoPage() {
             <Button
               variant="ghost"
               className="flex-1 sm:flex-none justify-start w-full hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary transition-colors font-medium"
-              onClick={() => router.push('/store-management/settings/info')}
             >
               <Building2 className="mr-2" />
               Store Info

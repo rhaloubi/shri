@@ -21,7 +21,7 @@ export function ProductCard({ product, settings }: ProductCardProps) {
         }
       }}
     >
-      {product.category && (
+      {product.Category && (
         <div className="absolute top-4 left-4 z-10 px-4 py-2 rounded-full border-2"
           style={{ 
             backgroundColor: settings.secondaryColor,
@@ -29,7 +29,7 @@ export function ProductCard({ product, settings }: ProductCardProps) {
           }}>
           <span className="text-xs uppercase tracking-tight" 
             style={{ color: settings.primaryColor, fontWeight: 900 }}>
-            {product.category}
+            {product.Category}
           </span>
         </div>
       )}
@@ -46,8 +46,8 @@ export function ProductCard({ product, settings }: ProductCardProps) {
 
       <div className="relative aspect-[4/5] overflow-hidden bg-[#E5E5E5]">
         <Image
-          src={productImage?.url || "/placeholder.svg"}
-          alt={productImage?.altText || product.name}
+          src={productImage?.URL || "/placeholder.svg"}
+          alt={productImage?.AltText || product.Name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -59,10 +59,10 @@ export function ProductCard({ product, settings }: ProductCardProps) {
             className="font-black text-xl leading-tight mb-1"
             style={{ color: settings.primaryColor }}
           >
-            {product.name}
+            {product.Name}
           </h4>
           <p className="text-sm" style={{ color: settings.primaryColor }}>
-            {product.description}
+            {product.Description}
           </p>
         </div>
 
@@ -71,7 +71,7 @@ export function ProductCard({ product, settings }: ProductCardProps) {
             className="font-black text-2xl"
             style={{ color: settings.primaryColor }}
           >
-            ${product.price.toFixed(2)}
+            ${product.Price?.toFixed(2)}
           </span>
         </div>
       </div>

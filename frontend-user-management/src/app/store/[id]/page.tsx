@@ -13,7 +13,7 @@ export default function StorePage() {
   const currentStore = shouldUseMockStoreData ? mockStore : store
   const currentSettings = shouldUseMockStoreData ? mockStoreSettings : storeSettings
   const currentProducts = products || []
-
+  console.log(currentProducts)
   if (isLoading) {
     return <div>Loading...</div>
   }

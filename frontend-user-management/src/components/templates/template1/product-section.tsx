@@ -48,7 +48,7 @@ function ScrollableProductRow({ title, products, settings }: ScrollableProductRo
 
       <div ref={scrollRef} className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6">
         {products.map((product) => (
-          <div key={product.id} className="flex-none w-[280px] sm:w-[320px]">
+          <div key={product.ID} className="flex-none w-[280px] sm:w-[320px]">
             <ProductCard product={product} settings={settings} />
           </div>
         ))}
@@ -65,7 +65,7 @@ interface ProductSectionProps {
 export function ProductSection({ products, settings }: ProductSectionProps) {
   // Group products by category
   const productsByCategory = products.reduce((acc, product) => {
-    const category = product.category || 'Other'
+    const category = product.Category || 'Other'
     if (!acc[category]) {
       acc[category] = []
     }

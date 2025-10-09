@@ -33,7 +33,8 @@ export const mockProducts = [
     id: "1",
     storeId: "1",
     name: "CRISPY CHILI OIL",
-    description: "Deliciously fiery and surprisingly versatile! Bold, aromatic chilies get a savory boost from garlic and shallots, while a hint of soy sauce adds a delightful umami depth.",
+    description:
+      "Deliciously fiery and surprisingly versatile! Bold, aromatic chilies get a savory boost from garlic and shallots, while a hint of soy sauce adds a delightful umami depth.",
     category: "Condiments",
     price: 12.0,
     sku: "CCO001",
@@ -47,8 +48,161 @@ export const mockProducts = [
         url: "/jar-of-crispy-chili-oil-with-red-chili-flakes.jpg",
         altText: "Crispy Chili Oil",
         isPrimary: true,
-      }
-    ]
+      },
+    ],
   },
-  // Add more mock products as needed
-]
+  {
+    id: "2",
+    storeId: "1",
+    name: "GARLIC SOY SAUCE",
+    description:
+      "A rich, umami-packed condiment perfect for marinades, stir-fries, and dipping sauces. Adds instant depth to any dish.",
+    category: "Condiments",
+    price: 8.5,
+    sku: "GSS002",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "2",
+        productId: "2",
+        url: "/bottle-of-garlic-soy-sauce.jpg",
+        altText: "Garlic Soy Sauce",
+        isPrimary: true,
+      },
+    ],
+  },
+  {
+    id: "3",
+    storeId: "1",
+    name: "SPICY PEANUT SAUCE",
+    description:
+      "Creamy roasted peanuts blended with chili and coconut for a rich, spicy kick. Ideal for noodles, dipping, or grilling.",
+    category: "Condiments",
+    price: 10.0,
+    sku: "SPS003",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "3",
+        productId: "3",
+        url: "/spicy-peanut-sauce-jar.jpg",
+        altText: "Spicy Peanut Sauce",
+        isPrimary: true,
+      },
+    ],
+  },
+  {
+    id: "4",
+    storeId: "1",
+    name: "SWEET CHILI SAUCE",
+    description:
+      "A perfect balance of sweetness and heat. Great as a dipping sauce or glaze for chicken and seafood.",
+    category: "Condiments",
+    price: 9.0,
+    sku: "SCS004",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "4",
+        productId: "4",
+        url: "/sweet-chili-sauce-bottle.jpg",
+        altText: "Sweet Chili Sauce",
+        isPrimary: true,
+      },
+    ],
+  },
+  {
+    id: "5",
+    storeId: "1",
+    name: "CRUNCHY SEAWEED CHIPS",
+    description:
+      "Light, crispy, and full of flavor — these seaweed chips are the ultimate healthy snack with a savory crunch.",
+    category: "Snacks",
+    price: 5.5,
+    sku: "CSC005",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "5",
+        productId: "5",
+        url: "/crunchy-seaweed-chips.jpg",
+        altText: "Crunchy Seaweed Chips",
+        isPrimary: true,
+      },
+    ],
+  },
+  {
+    id: "6",
+    storeId: "1",
+    name: "ROASTED ALMONDS",
+    description:
+      "Perfectly roasted and lightly salted almonds. A nutritious, high-protein snack for any time of the day.",
+    category: "Snacks",
+    price: 7.0,
+    sku: "RA006",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "6",
+        productId: "6",
+        url: "/roasted-almonds-pack.jpg",
+        altText: "Roasted Almonds",
+        isPrimary: true,
+      },
+    ],
+  },
+  {
+    id: "7",
+    storeId: "1",
+    name: "SPICY RICE CRACKERS",
+    description:
+      "A crunchy mix of rice crackers with a bold, spicy seasoning. Perfect for parties or snacking on the go.",
+    category: "Snacks",
+    price: 6.5,
+    sku: "SRC007",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "7",
+        productId: "7",
+        url: "/spicy-rice-crackers-mix.jpg",
+        altText: "Spicy Rice Crackers",
+        isPrimary: true,
+      },
+    ],
+  },
+  {
+    id: "8",
+    storeId: "1",
+    name: "HONEY GLAZED CASHEWS",
+    description:
+      "Crunchy roasted cashews coated in a delicate honey glaze for a sweet and salty treat.",
+    category: "Snacks",
+    price: 8.0,
+    sku: "HGC008",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    images: [
+      {
+        id: "8",
+        productId: "8",
+        url: "/honey-glazed-cashews.jpg",
+        altText: "Honey Glazed Cashews",
+        isPrimary: true,
+      },
+    ],
+  },
+];

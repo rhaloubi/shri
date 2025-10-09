@@ -185,9 +185,6 @@ export function ProductsList({ products, onProductDeleted, searchQuery, priceRan
                       onClick={() => router.push(`/store-management/products/${product.ID}`)}
                     >
                       <span className="font-medium">{product.Name}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {product.Description}
-                      </span>
                     </div>
                   </TableCell>
                   <TableCell>{product.Price.toFixed(2)}dh</TableCell>
