@@ -29,7 +29,7 @@ export function UserNav() {
       if (event.shiftKey && event.metaKey) {
         switch (event.key.toLowerCase()) {
           case "p":
-            void handleNavigation("/store-management/profile");
+            void handleNavigation("/store-management/settings/profile");
             break;
           case "d":
             void handleNavigation("/store-management/dashboard");

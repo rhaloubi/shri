@@ -11,6 +11,7 @@ import { Button } from "~/components/ui/button"
 import { ProductImageGallery } from "~/components/store-management/product/product-image-gallery"
 import { ProductDetailsSection } from "~/components/store-management/product/product-details-section"
 import LoadingPage from "~/components/loading-page"
+import { useSession } from "~/lib/auth-client"
 
 interface ProductImage {
   ID: string

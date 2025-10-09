@@ -126,7 +126,7 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => handleNavigation("/store-management/profile")}>
+              <DropdownMenuItem onClick={() => handleNavigation("/store-management/settings/profile")}>
                 <div className="flex items-center">
                   <UserPen className="mr-2 h-4 w-4" />
                   Profile

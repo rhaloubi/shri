@@ -91,7 +91,7 @@ export function SearchCommand() {
                       if (item.allowWithoutStore || hasStore) {
                         setOpen(false);
                         setSearchQuery("");
-                        router.push(`/admin/${item.name.toLowerCase()}`);
+                        router.push(`/store-management/${item.name.toLowerCase()}`);
                       }
                     }}
                   >
