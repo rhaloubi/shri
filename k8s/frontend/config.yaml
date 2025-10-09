@@ -3,9 +3,12 @@ kind: ConfigMap
 metadata:
   name: frontend-config
 data:
-  NEXT_PUBLIC_API_URL: "http://localhost:3000"
+  # Point to API Gateway service (not localhost)
+  NEXT_PUBLIC_API_URL: "http://api-gateway-service"
   NEXT_PUBLIC_APP_NAME: "Microservices App"
-  BETTER_AUTH_URL: "http://localhost:3000"
+  
+  # BetterAuth should point to frontend service itself
+  BETTER_AUTH_URL: "http://frontend-service"
 
   NODE_ENV: "production"
   PORT: "3000"
