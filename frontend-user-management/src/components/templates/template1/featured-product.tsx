@@ -1,17 +1,15 @@
 import Image from "next/image"
 import { Button } from "~/components/ui/button"
+import type { Product } from "~/hooks/use-store-data"
 
-export function FeaturedProduct() {
-  const featuredProduct = {
-    id: "1",
-    name: "CRISPY CHILI OIL",
-    description:
-      "Deliciously fiery and surprisingly versatile! Bold, aromatic chilies get a savory boost from garlic and shallots, while a hint of soy sauce adds a delightful umami depth. This Crispy Chili Oil will elevate any dish with its perfect balance of heat and crunch, making it a must-have for everything from stir-fries to noodles, and even as a spicy dip. Indulge in its irresistible flavors anytime you crave a burst of zesty excitement!",
-    category: "Condiments",
-    price: 12.0,
-    image: "/jar-of-crispy-chili-oil-with-red-chili-flakes.jpg",
-    colors: ["#8B4513", "#DC143C"],
-  }
+interface FeaturedProductProps {
+  product: Product
+}
+
+
+export function FeaturedProduct({ product }: FeaturedProductProps) {
+  // Safely handle undefined images array
+  const productImage = product.images?.find(img => img.isPrimary) || product.images?.[0]
 
   return (
     <section className="py-16 sm:py-24 lg:py-32 bg-white">
@@ -24,24 +22,14 @@ export function FeaturedProduct() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-7xl mx-auto">
-          {/* Product Image with thumbnails */}
+          {/* Product Image */}
           <div className="relative">
             <div className="flex gap-4">
-              {/* Thumbnail column */}
-              <div className="flex flex-col gap-4">
-                <button className="w-20 h-20 rounded-full border-4 border-black overflow-hidden bg-[#F5F5F5] flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-[#8B4513]"></div>
-                </button>
-                <button className="w-20 h-20 rounded-full border-4 border-black overflow-hidden bg-[#DC143C] flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-[#8B0000]"></div>
-                </button>
-              </div>
-
               {/* Main image */}
               <div className="relative flex-1 aspect-square rounded-3xl overflow-hidden border-8 border-black bg-[#E5E5E5]">
                 <Image
-                  src={featuredProduct.image || "/placeholder.svg"}
-                  alt={featuredProduct.name}
+                  src={productImage?.url || "/placeholder.svg"}
+                  alt={productImage?.altText || product.name}
                   fill
                   className="object-cover"
                   priority
@@ -76,10 +64,10 @@ export function FeaturedProduct() {
 
             <div>
               <h3 className="font-black text-5xl sm:text-6xl md:text-7xl text-black uppercase leading-none tracking-tighter mb-6">
-                {featuredProduct.name}
+                {product.name}
               </h3>
-              <p className="text-2xl font-black text-black mb-4">${featuredProduct.price.toFixed(2)}</p>
-              <p className="text-base text-black leading-relaxed">{featuredProduct.description}</p>
+              <p className="text-2xl font-black text-black mb-4">${product.price.toFixed(2)}</p>
+              <p className="text-base text-black leading-relaxed">{product.description}</p>
             </div>
 
             <div className="flex flex-col gap-4 pt-4">

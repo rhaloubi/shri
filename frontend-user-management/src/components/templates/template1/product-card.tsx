@@ -1,28 +1,21 @@
 import Image from "next/image"
 import { ShoppingBag } from "lucide-react"
-
-interface Product {
-  id: string
-  name: string
-  category: string
-  price: number
-  description: string
-  image: string
-  colors: string[]
-  badge: string
-}
+import type { Product } from "~/hooks/use-store-data"
 
 interface ProductCardProps {
   product: Product
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  // Safely handle undefined images array
+  const productImage = product.images?.find(img => img.isPrimary) || product.images?.[0]
+
   return (
     <div className="group relative bg-white rounded-3xl overflow-hidden border-4 border-transparent hover:border-black transition-all duration-300">
-      {/* Badge */}
-      {product.badge && (
+      {/* Badge - can be added as a property in the future if needed */}
+      {product.category && (
         <div className="absolute top-4 left-4 z-10 bg-white px-4 py-2 rounded-full border-2 border-black">
-          <span className="text-black font-black text-xs uppercase tracking-tight">{product.badge}</span>
+          <span className="text-black font-black text-xs uppercase tracking-tight">{product.category}</span>
         </div>
       )}
 
@@ -34,8 +27,8 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-[#E5E5E5]">
         <Image
-          src={product.image || "/placeholder.svg"}
-          alt={product.name}
+          src={productImage?.url || "/placeholder.svg"}
+          alt={productImage?.altText || product.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -49,19 +42,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="font-black text-2xl text-black">${product.price.toFixed(0)}.00</span>
-
-          {/* Color swatches */}
-          <div className="flex gap-2">
-            {product.colors.map((color, index) => (
-              <button
-                key={index}
-                className="w-6 h-6 rounded-full border-2 border-black"
-                style={{ backgroundColor: color }}
-                aria-label={`Color option ${index + 1}`}
-              />
-            ))}
-          </div>
+          <span className="font-black text-2xl text-black">${product.price.toFixed(2)}</span>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ interface Image {
   isPrimary: boolean
 }
 
-interface Product {
+export interface Product {
   id: string
   storeId: string
   name: string
@@ -24,7 +24,7 @@ interface Product {
   images: Image[]
 }
 
-interface Store {
+export interface Store {
   id: string
   userID: string
   phoneNumber: string
@@ -38,7 +38,7 @@ interface Store {
   updatedAt: string
 }
 
-interface StoreSettings {
+export interface StoreSettings {
   id: string
   storeId: string
   templateId: string
