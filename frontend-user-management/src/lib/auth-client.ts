@@ -3,7 +3,7 @@ import { createAuthClient } from "better-auth/react"
 // Use empty string to make all requests relative to current origin
 // This is the simplest and most portable solution
 export const authClient = createAuthClient({
-  baseURL: "", // Empty string = relative URLs
+  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost",
   // Or use: baseURL: typeof window !== "undefined" ? "" : (process.env.BETTER_AUTH_URL ?? "http://localhost:3000")
 })
 
