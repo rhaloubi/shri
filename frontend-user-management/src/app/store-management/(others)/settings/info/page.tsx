@@ -55,7 +55,6 @@ export default function StoreInfoPage() {
     IsActive: false
   })
   
-  const { data: session } = useSession()
 
   useEffect(() => {
     fetchStoreOwner()
