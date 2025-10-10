@@ -68,7 +68,7 @@ export default function StoreInfoPage() {
         return
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/store-owners`, {
+      const response = await fetch(`/api/store-owners`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ export default function StoreInfoPage() {
         return
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`, {
+      const response = await fetch(`/api/stores`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -150,7 +150,7 @@ export default function StoreInfoPage() {
         return
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/store-owners/${storeOwner.ID}`, {
+      const response = await fetch(`/api/store-owners/${storeOwner.ID}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -202,7 +202,7 @@ export default function StoreInfoPage() {
       formData.append("city", editedStore.City)
       formData.append("state", editedStore.State)
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/${storeDetails.ID}`, {
+      const response = await fetch(`/api/stores/${storeDetails.ID}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

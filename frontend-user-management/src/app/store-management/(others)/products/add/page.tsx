@@ -127,7 +127,7 @@ export default function AddProductPage() {
       }
 
       // Create the product (backend will extract store_id from token)
-      const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
+      const productResponse = await fetch(`/api/products`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -187,7 +187,7 @@ export default function AddProductPage() {
           imageFormData.append("is_primary", image.isPrimary.toString())
 
           const imageResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images`,
+            `/api/products/${productId}/images`,
             {
               method: "POST",
               headers: {

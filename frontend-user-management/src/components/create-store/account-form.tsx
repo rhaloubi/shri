@@ -29,7 +29,7 @@ export function AccountForm({ onSuccess }: AccountFormProps) {
         throw new Error("Authentication token not found")
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/store-owners`, {
+      const response = await fetch(`/api/store-owners`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

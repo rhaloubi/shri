@@ -77,7 +77,7 @@ export function useStoreData(): UseStoreDataReturn {
 
     try {
       // Fetch store data
-      const storeResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/${params.id}`)
+      const storeResponse = await fetch(`/api/stores/${params.id}`)
       if (!storeResponse.ok) {
         throw new Error("Failed to fetch store data")
       }
@@ -93,7 +93,7 @@ export function useStoreData(): UseStoreDataReturn {
       setStoreSettings(settingsData)
 
       // Fetch products
-      const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${storeData.userID}/stores`)
+      const productsResponse = await fetch(`/api/products/${storeData.userID}/stores`)
       if (!productsResponse.ok) {
         throw new Error("Failed to fetch products")
       }

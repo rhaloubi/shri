@@ -31,7 +31,7 @@ export function StoreDisplay() {
         return
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`, {
+      const response = await fetch(`/api/stores`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

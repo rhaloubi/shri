@@ -113,7 +113,7 @@ export function ProductsList({ products, onProductDeleted, searchQuery, priceRan
         throw new Error('Authentication token not found');
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${selectedProduct.ID}`, {
+      const response = await fetch(`/api/products/${selectedProduct.ID}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
