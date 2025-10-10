@@ -25,13 +25,11 @@ export async function middleware(request: NextRequest) {
 
   // 2. Store Existence Check (if authenticated)
   try {
-    // ✅ FIX: Get the actual external URL (from X-Forwarded-Host header or construct it)
+    // ✅ FIX: Route through the Ingress using the request's host header
+    // This uses the same path the browser uses, ensuring consistency
     const host = request.headers.get('host') || 'localhost';
     const protocol = request.headers.get('x-forwarded-proto') || 'http';
-    
-    // Use the API Gateway service directly instead of going through external URL
-    // This avoids the port 3000 issue
-    const apiUrl = `http://localhost/api/stores/has-store`;
+    const apiUrl = `${protocol}://${host}/api/stores/has-store`;
     
     console.log('🔗 Calling API:', apiUrl);
 
@@ -69,7 +67,7 @@ export async function middleware(request: NextRequest) {
       ];
 
       if (!allowedPathsWithoutStore.includes(pathname)) {
-        console.log('🔄 Redirecting to dashboard (no store access)');
+        console.log('📄 Redirecting to dashboard (no store access)');
         return NextResponse.redirect(new URL('/store-management/dashboard', request.url));
       }
       console.log('✅ Path allowed without store');
@@ -88,7 +86,7 @@ export async function middleware(request: NextRequest) {
     ];
 
     if (!fallbackAllowedPaths.includes(pathname)) {
-      console.log('🔄 Redirecting to dashboard (error fallback)');
+      console.log('📄 Redirecting to dashboard (error fallback)');
       return NextResponse.redirect(new URL('/store-management/dashboard', request.url));
     }
   }
