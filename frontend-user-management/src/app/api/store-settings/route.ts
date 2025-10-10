@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { createWebStore, updateWebStore, patchWebStore, geteEStoreByToken } from "~/server/e-store/store";
+import { createWebStore, updateWebStore, patchWebStore, getEStoreByToken } from "~/server/e-store/store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
       return Response.json({ error: "Authorization header required" }, { status: 401 });
     }
 
-    const result = await geteEStoreByToken();
+    const result = await getEStoreByToken();
     return Response.json(result);
   } catch (error) {
     console.error("Error in GET /api/store-settings:", error);
