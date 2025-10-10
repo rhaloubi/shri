@@ -19,14 +19,18 @@ export default function MarketplacePage() {
         </Link>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
+          <Link
+            href="/store-management/login"
             className="text-white/70 hover:text-white hover:bg-white/5 border border-white/20 rounded-full px-6"
-            onClick={() => window.location.href = "/store-management/login"}
           >
             Login
-          </Button>
-          <Button className="bg-white text-[#141414] hover:bg-white/90 rounded-full px-6 font-medium" onClick={() => window.location.href = "/store-management/signup"}>Sign Up</Button>
+          </Link>
+          <Link
+            href="/store-management/signup"
+            className="bg-white text-[#141414] hover:bg-white/90 rounded-full px-6 font-medium"
+          >
+            Sign Up
+          </Link>
         </div>
       </header>
 
@@ -65,13 +69,12 @@ export default function MarketplacePage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-            <Button
-              size="lg"
+            <Link
+              href="/store-management/signup"
               className="bg-white text-[#141414] hover:bg-white/90 rounded-full px-8 py-6 font-medium text-base"
-              onClick={() => window.location.href = "/store-management/signup"}
             >
               Try Store Manager
-            </Button>
+            </Link>
             <Button
               size="lg"
               variant="ghost"
