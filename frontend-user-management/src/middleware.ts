@@ -25,21 +25,21 @@ export async function middleware(request: NextRequest) {
 
   // 2. Store Existence Check (if authenticated)
   try {
-    // ✅ FIX: Route through the Ingress using the request's host header
-    // This uses the same path the browser uses, ensuring consistency
-    const host = request.headers.get('host') || 'localhost';
-    const protocol = request.headers.get('x-forwarded-proto') || 'http';
-    const apiUrl = `${protocol}://${host}/api/stores/has-store`;
+    // ✅ Use Kubernetes DNS to reach API Gateway service directly
+    const apiUrl = `http://api-gateway-service/api/stores/has-store`;
     
-    console.log('🔗 Calling API:', apiUrl);
+    console.log('🔗 Calling API Gateway:', apiUrl);
 
     const hasStoreRes = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
       cache: 'no-store',
+      // Add timeout
+      signal: AbortSignal.timeout(10000), // 10 second timeout
     });
 
     console.log('📡 API Response status:', hasStoreRes.status);
@@ -76,6 +76,11 @@ export async function middleware(request: NextRequest) {
     }
   } catch (error) {
     console.error('💥 Error in middleware:', error);
+    console.error('💥 Error message:', (error as any)?.message);
+    console.error('💥 Error code:', (error as any)?.code);
+    
+    // If it's a timeout or network error, still allow access to dashboard
+    // This prevents users from being locked out due to temporary API issues
     const fallbackAllowedPaths = [
       '/store-management/login',
       '/store-management/dashboard',
@@ -89,6 +94,8 @@ export async function middleware(request: NextRequest) {
       console.log('📄 Redirecting to dashboard (error fallback)');
       return NextResponse.redirect(new URL('/store-management/dashboard', request.url));
     }
+    
+    console.log('✅ Path allowed in fallback mode (API error)');
   }
 
   console.log('✅ Middleware passed, continuing to page');
