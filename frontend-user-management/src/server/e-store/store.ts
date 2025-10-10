@@ -37,7 +37,7 @@ async function verifyStoreAccess(): Promise<HasStoreResponse> {
     }
 
     // ✅ Use Kubernetes DNS for internal service calls
-    const apiUrl = `http://api-gateway-service/api/stores/has-store`;
+    const apiUrl = `/api/stores/has-store`;
     
     const response = await fetch(apiUrl, {
       method: 'GET',
