@@ -2,12 +2,12 @@ export const storeTemplates = [
   {
     name: "default",
     description: "Clean and contemporary design with focus on products",
-    preview: "https://res.cloudinary.com/dkjtj1ljq/image/upload/v1754315083/car-rentals/uccpdv5wmiiuomrmoy9u.jpg",
+    preview: "https://res.cloudinary.com/dkjtj1ljq/image/upload/v1760140452/product_images/product-87c9c663-2ea5-42cd-a356-d3a8a10602e0-image-1760140451212126116.jpg",
   },
   {
     name: "classic",
     description: "Timeless design with sophisticated typography",
-    preview: "https://res.cloudinary.com/dkjtj1ljq/image/upload/v1752687289/car-rentals/jmeawcgdohs6zjjrzmv5.png",
+    preview: "https://res.cloudinary.com/dkjtj1ljq/image/upload/v1760140462/product_images/product-87c9c663-2ea5-42cd-a356-d3a8a10602e0-image-1760140462501589332.jpg",
   },
 ]
 

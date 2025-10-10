@@ -4,6 +4,7 @@ import { useStoreData } from "~/hooks/use-store-data"
 import Template1 from "~/components/templates/tem1"
 import Template2 from "~/components/templates/tem2"
 import { mockStore, mockStoreSettings, mockProducts } from "~/components/templates/template1/mock-data"
+import LoadingScreen from "~/components/loading"
 
 export default function StorePage() {
   const { store, storeSettings, products, isLoading } = useStoreData()
@@ -15,7 +16,7 @@ export default function StorePage() {
   const currentProducts = products || []
   console.log(currentProducts)
   if (isLoading) {
-    return <div>Loading...</div>
+    return <LoadingScreen />
   }
 
   // Render template based on templateId
