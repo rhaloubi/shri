@@ -25,12 +25,17 @@ export async function middleware(request: NextRequest) {
 
   // 2. Store Existence Check (if authenticated)
   try {
-    // ✅ Use the same base URL as the current request (through Ingress)
-    const apiUrl = new URL('/api/stores/has-store', request.nextUrl.origin);
+    // ✅ FIX: Get the actual external URL (from X-Forwarded-Host header or construct it)
+    const host = request.headers.get('host') || 'localhost';
+    const protocol = request.headers.get('x-forwarded-proto') || 'http';
     
-    console.log('🔗 Calling API:', apiUrl.toString());
+    // Use the API Gateway service directly instead of going through external URL
+    // This avoids the port 3000 issue
+    const apiUrl = `http://localhost/api/stores/has-store`;
+    
+    console.log('🔗 Calling API:', apiUrl);
 
-    const hasStoreRes = await fetch(apiUrl.toString(), {
+    const hasStoreRes = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
