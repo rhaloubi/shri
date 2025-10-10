@@ -3,16 +3,13 @@ kind: ConfigMap
 metadata:
   name: frontend-config
 data:
-  # Point to API Gateway service (not localhost)
-  NEXT_PUBLIC_API_URL: "http://localhost"
-  NEXT_PUBLIC_APP_NAME: "Microservices App"
+  # Empty string = relative URLs (easiest solution!)
+  NEXT_PUBLIC_API_URL: ""
 
-  # BetterAuth should point to frontend service itself
+  NEXT_PUBLIC_APP_NAME: "Microservices App"
   BETTER_AUTH_URL: "http://localhost"
-  NEXT_PUBLIC_BETTER_AUTH_URL: "http://localhost"
 
   NODE_ENV: "production"
   PORT: "3000"
 
-  # Next.js specific
   NEXT_TELEMETRY_DISABLED: "1"

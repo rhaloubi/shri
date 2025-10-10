@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
 
   // 2. Store Existence Check (if authenticated)
   try {
-    const hasStoreRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+    const hasStoreRes = await fetch(`/api/stores/has-store`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
@@ -47,6 +47,7 @@ export async function middleware(request: NextRequest) {
         '/store-management/settings/profile',
         '/store-management/settings/change-password',
         '/store-management/signup',
+        '/store-management/create-store',
       ];
 
       if (!allowedPathsWithoutStore.includes(pathname)) {
@@ -56,7 +57,7 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     console.error('Error checking store status in middleware:', error);
     // If there's an error, redirect to dashboard as a fallback
-    if (pathname !== '/store-management/login' && pathname !== '/store-management/dashboard' && pathname !== '/store-management/settings/profile' && pathname !== '/store-management/settings/change-password' && pathname !== '/store-management/signup') {
+    if (pathname !== '/store-management/login' && pathname !== '/store-management/dashboard' && pathname !== '/store-management/settings/profile' && pathname !== '/store-management/settings/change-password' && pathname !== '/store-management/signup' && pathname !== '/store-management/create-store') {
       return NextResponse.redirect(new URL('/store-management/dashboard', request.url));
     }
   }

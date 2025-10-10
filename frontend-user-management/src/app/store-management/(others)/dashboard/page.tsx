@@ -65,7 +65,7 @@ export default function DashboardPage() {
           return
         }
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+        const res = await fetch(`/api/stores/has-store`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -100,13 +100,13 @@ export default function DashboardPage() {
 
       // Fetch all data in parallel
       const [productsRes, storeRes, ordersRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${session?.user?.id}/stores`, {
+        fetch(`/api/products/${session?.user?.id}/stores`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`, {
+        fetch(`/api/stores`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
+        fetch(`/api/orders`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ])

@@ -63,7 +63,7 @@ export default function EditProductPage({ params }: PageProps) {
       if (!token) throw new Error('Authentication token not found')
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`,
+        ` /api/products/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,7 +115,7 @@ export default function EditProductPage({ params }: PageProps) {
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`,
+        `/api/products/${productId}`,
         {
           method: 'PUT',
           headers: {

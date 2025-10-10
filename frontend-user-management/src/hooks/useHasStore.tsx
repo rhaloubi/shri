@@ -19,7 +19,7 @@ export const HasStoreProvider = ({ children }: { children: React.ReactNode }) =>
         }
 
         // Use the correct API URL
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+        const res = await fetch(`/api/stores/has-store`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

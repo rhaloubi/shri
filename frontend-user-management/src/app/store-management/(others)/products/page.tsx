@@ -82,7 +82,7 @@ export default function ProductsPage() {
         throw new Error("Authentication token not found");
       }
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${session.user.id}/stores`,
+        `/api/products/${session.user.id}/stores`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

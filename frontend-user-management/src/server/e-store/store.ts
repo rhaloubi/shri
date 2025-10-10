@@ -21,7 +21,7 @@ interface StoreSettingsInput {
 export async function createWebStore(input: StoreSettingsInput, userId: string) {
   try {
     // First, check if user has a store using the API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+    const response = await fetch(`  /api/stores/has-store`, {
       headers: {
         'Authorization': `Bearer ${headers().get('authorization')?.split(' ')[1] || ''}`,
       },
@@ -66,7 +66,7 @@ export async function createWebStore(input: StoreSettingsInput, userId: string) 
 export async function updateWebStore( input: StoreSettingsInput) {
   try {
     // Check if store exists and user has access
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+    const response = await fetch(`/api/stores/has-store`, {
       headers: {
         'Authorization': `Bearer ${headers().get('authorization')?.split(' ')[1] || ''}`,
       },
@@ -129,7 +129,7 @@ export async function getWebStore(id: string) {
 export async function patchWebStore( input: Partial<StoreSettingsInput>) {
   try {
     // Check if store exists and user has access
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+    const response = await fetch(`/api/stores/has-store`, {
       headers: {
         'Authorization': `Bearer ${headers().get('authorization')?.split(' ')[1] || ''}`,
       },
@@ -162,7 +162,7 @@ export async function patchWebStore( input: Partial<StoreSettingsInput>) {
 
 export async function geteEStoreByToken() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/has-store`, {
+    const response = await fetch(`/api/stores/has-store`, {
       headers: {
         'Authorization': `Bearer ${headers().get('authorization')?.split(' ')[1] || ''}`,
       },

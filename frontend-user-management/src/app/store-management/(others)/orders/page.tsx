@@ -58,7 +58,7 @@ export default function OrdersPage() {
       if (!token) throw new Error("Authentication token not found")
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/orders`,
+        `/api/orders`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

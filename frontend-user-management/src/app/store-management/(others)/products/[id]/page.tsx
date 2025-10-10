@@ -56,7 +56,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
       const token = getCookie("better-auth.jwt")
       if (!token) throw new Error('Authentication token not found')
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`, {
+      const response = await fetch(`/api/products/${productId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -94,7 +94,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
         formData.append('altText', '')  // Add default alt text
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images`,
+          `/api/products/${productId}/images`,
           {
             method: 'POST',
             headers: {
@@ -125,7 +125,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
       if (!token) throw new Error('Authentication token not found')
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images/${imageId}`,
+        `/api/products/${productId}/images/${imageId}`,
         {
           method: 'DELETE',
           headers: {
@@ -154,7 +154,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
       if (!token) throw new Error('Authentication token not found')
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images/${imageId}/primary`,
+        ` /api/products/${productId}/images/${imageId}/primary`,
         {
           method: 'PUT',
           headers: {
@@ -183,7 +183,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
       if (!token) throw new Error('Authentication token not found')
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images/${imageId}/alt-text`,
+        `/api/products/${productId}/images/${imageId}/alt-text`,
         {
           method: 'PUT',
           headers: {
@@ -212,7 +212,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
       const token = getCookie("better-auth.jwt")
       if (!token) throw new Error('Authentication token not found')
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`, {
+      const response = await fetch(`/api/products/${productId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
